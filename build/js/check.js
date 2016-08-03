@@ -1,7 +1,4 @@
 function getMessage(a, b) {
-  console.log(a);
-  console.log(b);
-  console.log(typeof a);
   if (typeof a === 'boolean') {
     if ( a == true) {
       return 'Переданное GIF-изображение анимировано и содержит ' + b + ' кадров';
@@ -14,7 +11,7 @@ function getMessage(a, b) {
     return 'Переданное SVG-изображение содержит ' + a + ' объектов и ' + b * 4 + ' атрибутов';
   }
 
-  if (typeof a === 'object') {
+  if (typeof a === 'object' && typeof b !== 'object') {
     var amountOfRedPoints = 0;
 
     for (var i = 0;  i < a.length; ++i) {
