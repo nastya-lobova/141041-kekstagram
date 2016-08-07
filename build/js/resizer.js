@@ -119,6 +119,20 @@
           this._resizeConstraint.side - this._ctx.lineWidth / 2,
           this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
+      // Отрисовка затемненного прямоугольника, который обрамляет область кадрирования
+      this._ctx.beginPath();
+      this._ctx.rect(displX, displY, this._container.width, this._container.height);
+      this._ctx.rect(-(this._resizeConstraint.side / 2 + this._ctx.lineWidth), -(this._resizeConstraint.side / 2 + this._ctx.lineWidth), this._resizeConstraint.side + this._ctx.lineWidth, this._resizeConstraint.side + this._ctx.lineWidth);
+      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+      this._ctx.fill('evenodd');
+      this._ctx.closePath();
+
+      // Отрисовка размеров изображения
+      this._ctx.font = '20px Open Sans';
+      this._ctx.fillStyle = 'white';
+      this._ctx.textAlign = 'center';
+      this._ctx.fillText(this._image.naturalWidth + ' × ' + this._image.naturalHeight, 0, -(this._resizeConstraint.side / 2 + this._ctx.lineWidth + 10));
+
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
       // следующий кадр рисовался с привычной системой координат, где точка
