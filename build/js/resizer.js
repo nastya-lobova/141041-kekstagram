@@ -88,15 +88,15 @@
       // canvas'a поэтому важно вовремя поменять их, если нужно начать отрисовку
       // чего-либо с другой обводкой.
 
-      // Толщина линии.
-      this._ctx.lineWidth = 6;
-      // Цвет обводки.
-      this._ctx.strokeStyle = '#ffe753';
-      // Размер штрихов. Первый элемент массива задает длину штриха, второй
-      // расстояние между соседними штрихами.
-      this._ctx.setLineDash([15, 10]);
-      // Смещение первого штриха от начала линии.
-      this._ctx.lineDashOffset = 7;
+      // // Толщина линии.
+      // this._ctx.lineWidth = 6;
+      // // Цвет обводки.
+      // this._ctx.strokeStyle = '#ffe753';
+      // // Размер штрихов. Первый элемент массива задает длину штриха, второй
+      // // расстояние между соседними штрихами.
+      // this._ctx.setLineDash([15, 10]);
+      // // Смещение первого штриха от начала линии.
+      // this._ctx.lineDashOffset = 7;
 
       // Сохранение состояния канваса.
       this._ctx.save();
@@ -132,6 +132,49 @@
       this._ctx.fillStyle = 'white';
       this._ctx.textAlign = 'center';
       this._ctx.fillText(this._image.naturalWidth + ' × ' + this._image.naturalHeight, 0, -(this._resizeConstraint.side / 2 + this._ctx.lineWidth + 10));
+
+      var radius = 5;
+      var lineDottedOffset = 5;
+      var borderCoordinateX = -(this._resizeConstraint.side / 2);
+      var borderCoordinateY = -(this._resizeConstraint.side / 2);
+      var borderColor = '#ffe753';
+
+      this._ctx.fillStyle = borderColor;
+      this._ctx.beginPath();
+      while ((-(this._resizeConstraint.side / 2) + this._resizeConstraint.side) > borderCoordinateX) {
+        this._ctx.arc(borderCoordinateX + lineDottedOffset / 2 + radius,-(this._resizeConstraint.side / 2 - 5), 5, 0,Math.PI * 2,true);
+        borderCoordinateX += lineDottedOffset + radius * 2;
+      }
+      this._ctx.fill();
+      this._ctx.closePath();
+
+      this._ctx.fillStyle = borderColor;
+      this._ctx.beginPath();
+      while ((-(this._resizeConstraint.side / 2) + this._resizeConstraint.side) > borderCoordinateY) {
+        this._ctx.arc(borderCoordinateX, borderCoordinateY + lineDottedOffset / 2 + radius, 5, 0,Math.PI * 2,true);
+        borderCoordinateY += lineDottedOffset + radius * 2;
+      }
+      this._ctx.fill();
+      this._ctx.closePath();
+
+
+      this._ctx.fillStyle = borderColor;
+      this._ctx.beginPath();
+      while ((this._resizeConstraint.side / 2 - this._resizeConstraint.side + lineDottedOffset / 2) < borderCoordinateX) {
+        this._ctx.arc(borderCoordinateX - (lineDottedOffset / 2 + radius), borderCoordinateY, 5, 0,Math.PI * 2,true);
+        borderCoordinateX -= (lineDottedOffset + radius * 2);
+      }
+      this._ctx.fill();
+      this._ctx.closePath();
+
+      this._ctx.fillStyle = borderColor;
+      this._ctx.beginPath();
+      while ((this._resizeConstraint.side / 2 - this._resizeConstraint.side) < borderCoordinateY) {
+        this._ctx.arc(borderCoordinateX, borderCoordinateY - (lineDottedOffset / 2 + radius), 5, 0,Math.PI * 2,true);
+        borderCoordinateY -= (lineDottedOffset + radius * 2);
+      }
+      this._ctx.fill();
+      this._ctx.closePath();
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
