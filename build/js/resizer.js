@@ -88,9 +88,9 @@
       // canvas'a поэтому важно вовремя поменять их, если нужно начать отрисовку
       // чего-либо с другой обводкой.
 
-      // // Толщина линии.
-      // this._ctx.lineWidth = 6;
-      // // Цвет обводки.
+      // Толщина линии.
+      this._ctx.lineWidth = 6;
+      // Цвет обводки.
       // this._ctx.strokeStyle = '#ffe753';
       // // Размер штрихов. Первый элемент массива задает длину штриха, второй
       // // расстояние между соседними штрихами.
@@ -113,11 +113,11 @@
 
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
-      this._ctx.strokeRect(
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2);
+      // this._ctx.strokeRect(
+      //     (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+      //     (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+      //     this._resizeConstraint.side - this._ctx.lineWidth / 2,
+      //     this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
       // Отрисовка затемненного прямоугольника, который обрамляет область кадрирования
       this._ctx.beginPath();
@@ -133,48 +133,96 @@
       this._ctx.textAlign = 'center';
       this._ctx.fillText(this._image.naturalWidth + ' × ' + this._image.naturalHeight, 0, -(this._resizeConstraint.side / 2 + this._ctx.lineWidth + 10));
 
-      var radius = 5;
-      var lineDottedOffset = 5;
-      var borderCoordinateX = -(this._resizeConstraint.side / 2);
-      var borderCoordinateY = -(this._resizeConstraint.side / 2);
+      // Отрисовка рамки точками
+      var dottedRadius = this._ctx.lineWidth / 2;
+      var lineDottedStep = 5;
       var borderColor = '#ffe753';
 
-      this._ctx.fillStyle = borderColor;
-      this._ctx.beginPath();
-      while ((-(this._resizeConstraint.side / 2) + this._resizeConstraint.side) > borderCoordinateX) {
-        this._ctx.arc(borderCoordinateX + lineDottedOffset / 2 + radius,-(this._resizeConstraint.side / 2 - 5), 5, 0,Math.PI * 2,true);
-        borderCoordinateX += lineDottedOffset + radius * 2;
-      }
-      this._ctx.fill();
-      this._ctx.closePath();
+      var drawLineDotted = function(ctx, beginX, beginY, endX, endY, radius, step, color) {
+        var currentX = beginX;
+        var currentY = beginY;
 
-      this._ctx.fillStyle = borderColor;
-      this._ctx.beginPath();
-      while ((-(this._resizeConstraint.side / 2) + this._resizeConstraint.side) > borderCoordinateY) {
-        this._ctx.arc(borderCoordinateX, borderCoordinateY + lineDottedOffset / 2 + radius, 5, 0,Math.PI * 2,true);
-        borderCoordinateY += lineDottedOffset + radius * 2;
-      }
-      this._ctx.fill();
-      this._ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.beginPath();
 
+        if (beginX == endX) {
+          if (beginY < endY) {
+            while (endY > currentY) {
+              ctx.arc(endX, currentY + step / 2 + radius, radius, 0, Math.PI * 2);
+              currentY += step + radius * 2;
+            }
+          } else {
+            while (endY < currentY) {
+              ctx.arc(endX , currentY - (step / 2 + radius), radius, 0, Math.PI * 2);
+              currentY -= (step + radius * 2);
+            }
+          }
 
-      this._ctx.fillStyle = borderColor;
-      this._ctx.beginPath();
-      while ((this._resizeConstraint.side / 2 - this._resizeConstraint.side + lineDottedOffset / 2) < borderCoordinateX) {
-        this._ctx.arc(borderCoordinateX - (lineDottedOffset / 2 + radius), borderCoordinateY, 5, 0,Math.PI * 2,true);
-        borderCoordinateX -= (lineDottedOffset + radius * 2);
-      }
-      this._ctx.fill();
-      this._ctx.closePath();
+        } else if (beginY == endY) {
+          if (beginX < endX) {
+            while (endX > currentX) {
+              ctx.arc(currentX + step / 2 + radius, endY, radius, 0, Math.PI * 2);
+              currentX += step + radius * 2;
+            }
+          } else {
+            while (endX < currentX) {
+              ctx.arc(currentX - (step / 2 + radius), endY, radius, 0, Math.PI * 2);
+              currentX -= (step + radius * 2);
+            }
+          }
+        }
 
-      this._ctx.fillStyle = borderColor;
-      this._ctx.beginPath();
-      while ((this._resizeConstraint.side / 2 - this._resizeConstraint.side) < borderCoordinateY) {
-        this._ctx.arc(borderCoordinateX, borderCoordinateY - (lineDottedOffset / 2 + radius), 5, 0,Math.PI * 2,true);
-        borderCoordinateY -= (lineDottedOffset + radius * 2);
-      }
-      this._ctx.fill();
-      this._ctx.closePath();
+        ctx.fill();
+        ctx.closePath();
+      };
+
+      // Вверхняя линия
+      drawLineDotted(
+        this._ctx,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        this._resizeConstraint.side / 2 - this._ctx.lineWidth,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        dottedRadius,
+        lineDottedStep,
+        borderColor
+      );
+
+      // Правая линия
+      drawLineDotted(
+        this._ctx,
+        this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
+        this._resizeConstraint.side / 2 - this._ctx.lineWidth,
+        dottedRadius,
+        lineDottedStep,
+        borderColor
+      );
+
+      // Нижняя линия
+      drawLineDotted(
+        this._ctx,
+        this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
+        this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) + this._ctx.lineWidth,
+        this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
+        dottedRadius,
+        lineDottedStep,
+        borderColor
+      );
+
+      // Левая линия
+      drawLineDotted(
+        this._ctx,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) + this._ctx.lineWidth,
+        dottedRadius,
+        lineDottedStep,
+        borderColor
+      );
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
