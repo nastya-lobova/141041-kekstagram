@@ -90,13 +90,6 @@
 
       // Толщина линии.
       this._ctx.lineWidth = 6;
-      // Цвет обводки.
-      // this._ctx.strokeStyle = '#ffe753';
-      // // Размер штрихов. Первый элемент массива задает длину штриха, второй
-      // // расстояние между соседними штрихами.
-      // this._ctx.setLineDash([15, 10]);
-      // // Смещение первого штриха от начала линии.
-      // this._ctx.lineDashOffset = 7;
 
       // Сохранение состояния канваса.
       this._ctx.save();
@@ -110,14 +103,6 @@
       // нужно отрисовать и координаты его верхнего левого угла.
       // Координаты задаются от центра холста.
       this._ctx.drawImage(this._image, displX, displY);
-
-      // Отрисовка прямоугольника, обозначающего область изображения после
-      // кадрирования. Координаты задаются от центра.
-      // this._ctx.strokeRect(
-      //     (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-      //     (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-      //     this._resizeConstraint.side - this._ctx.lineWidth / 2,
-      //     this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
       // Отрисовка затемненного прямоугольника, который обрамляет область кадрирования
       this._ctx.beginPath();
@@ -133,52 +118,15 @@
       this._ctx.textAlign = 'center';
       this._ctx.fillText(this._image.naturalWidth + ' × ' + this._image.naturalHeight, 0, -(this._resizeConstraint.side / 2 + this._ctx.lineWidth + 10));
 
-      // Отрисовка рамки точками
+      // Радиус точки
       var dottedRadius = this._ctx.lineWidth / 2;
+      // Смещение точки
       var lineDottedStep = 5;
+      // Цвет рамки
       var borderColor = '#ffe753';
 
-      var drawLineDotted = function(ctx, beginX, beginY, endX, endY, radius, step, color) {
-        var currentX = beginX;
-        var currentY = beginY;
-
-        ctx.fillStyle = color;
-        ctx.beginPath();
-
-        if (beginX == endX) {
-          if (beginY < endY) {
-            while (endY > currentY) {
-              ctx.arc(endX, currentY + step / 2 + radius, radius, 0, Math.PI * 2);
-              currentY += step + radius * 2;
-            }
-          } else {
-            while (endY < currentY) {
-              ctx.arc(endX , currentY - (step / 2 + radius), radius, 0, Math.PI * 2);
-              currentY -= (step + radius * 2);
-            }
-          }
-
-        } else if (beginY == endY) {
-          if (beginX < endX) {
-            while (endX > currentX) {
-              ctx.arc(currentX + step / 2 + radius, endY, radius, 0, Math.PI * 2);
-              currentX += step + radius * 2;
-            }
-          } else {
-            while (endX < currentX) {
-              ctx.arc(currentX - (step / 2 + radius), endY, radius, 0, Math.PI * 2);
-              currentX -= (step + radius * 2);
-            }
-          }
-        }
-
-        ctx.fill();
-        ctx.closePath();
-      };
-
       // Вверхняя линия
-      drawLineDotted(
-        this._ctx,
+      this.drawLineDotted(
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
         this._resizeConstraint.side / 2 - this._ctx.lineWidth,
@@ -189,8 +137,7 @@
       );
 
       // Правая линия
-      drawLineDotted(
-        this._ctx,
+      this.drawLineDotted(
         this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
         this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
@@ -201,8 +148,7 @@
       );
 
       // Нижняя линия
-      drawLineDotted(
-        this._ctx,
+      this.drawLineDotted(
         this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
         this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
         (-this._resizeConstraint.side / 2) + this._ctx.lineWidth,
@@ -213,8 +159,7 @@
       );
 
       // Левая линия
-      drawLineDotted(
-        this._ctx,
+      this.drawLineDotted(
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
         this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
@@ -232,6 +177,48 @@
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
       this._ctx.restore();
     },
+
+    drawLineDotted : function(beginX, beginY, endX, endY, radius, step, color) {
+      var currentX = beginX;
+      var currentY = beginY;
+
+      this._ctx.fillStyle = color;
+      this._ctx.beginPath();
+
+      if (beginX === endX) {
+        if (beginY < endY) {
+          while (endY > currentY) {
+            this.drawDot(endX, currentY + step / 2 + radius, radius);
+            currentY += step + radius * 2;
+          }
+        } else {
+          while (endY < currentY) {
+            this.drawDot(endX, currentY - (step / 2 + radius), radius);
+            currentY -= (step + radius * 2);
+          }
+        }
+      } else if (beginY === endY) {
+        if (beginX < endX) {
+          while (endX > currentX) {
+            this.drawDot(currentX + step / 2 + radius, endY, radius);
+            currentX += step + radius * 2;
+          }
+        } else {
+          while (endX < currentX) {
+            this.drawDot(currentX - (step / 2 + radius), endY, radius);
+            currentX -= (step + radius * 2);
+          }
+        }
+      }
+
+      this._ctx.fill();
+      this._ctx.closePath();
+    },
+
+    drawDot : function(coordinateX, coordinateY, radius) {
+      this._ctx.arc(coordinateX, coordinateY, radius, 0, Math.PI * 2);
+    },
+
 
     /**
      * Включение режима перемещения. Запоминается текущее положение курсора,
