@@ -121,7 +121,7 @@
       // Радиус точки
       var dottedRadius = this._ctx.lineWidth / 2;
       // Смещение точки
-      var lineDottedStep = 5;
+      var lineDottedStep = 10;
       // Цвет рамки
       var borderColor = '#ffe753';
 
@@ -183,29 +183,21 @@
       this._ctx.beginPath();
 
       if (beginX === endX) {
-        if (beginY < endY) {
-          var currentY = beginY;
-        } else {
-          currentY = endY;
-          endY = beginY;
-        }
+        var maxY = Math.max(beginY, endY);
+        var minY = Math.min(beginY, endY);
 
-        while (currentY < endY) {
-          this.drawDot(endX, currentY, radius);
-          currentY += step + radius * 2;
+        while (minY < maxY) {
+          this.drawDot(endX, minY, radius);
+          minY += step;
         }
 
       } else if (beginY === endY) {
-        if (beginX < endX) {
-          var currentX = beginX;
-        } else {
-          currentX = endX;
-          endX = beginX;
-        }
+        var maxX = Math.max(beginX, endX);
+        var minX = Math.min(beginX, endX);
 
-        while (currentX < endX) {
-          this.drawDot(currentX, endY, radius);
-          currentX += step + radius * 2;
+        while (minX < maxX) {
+          this.drawDot(minX, endY, radius);
+          minX += step;
         }
       }
 
