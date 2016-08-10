@@ -179,35 +179,33 @@
     },
 
     drawLineDotted : function(beginX, beginY, endX, endY, radius, step, color) {
-      var currentX = beginX;
-      var currentY = beginY;
-
       this._ctx.fillStyle = color;
       this._ctx.beginPath();
 
       if (beginX === endX) {
         if (beginY < endY) {
-          while (endY > currentY) {
-            this.drawDot(endX, currentY + step / 2 + radius, radius);
-            currentY += step + radius * 2;
-          }
+          var currentY = beginY;
         } else {
-          while (endY < currentY) {
-            this.drawDot(endX, currentY - (step / 2 + radius), radius);
-            currentY -= (step + radius * 2);
-          }
+          currentY = endY;
+          endY = beginY;
         }
+
+        while (currentY < endY) {
+          this.drawDot(endX, currentY, radius);
+          currentY += step + radius * 2;
+        }
+
       } else if (beginY === endY) {
         if (beginX < endX) {
-          while (endX > currentX) {
-            this.drawDot(currentX + step / 2 + radius, endY, radius);
-            currentX += step + radius * 2;
-          }
+          var currentX = beginX;
         } else {
-          while (endX < currentX) {
-            this.drawDot(currentX - (step / 2 + radius), endY, radius);
-            currentX -= (step + radius * 2);
-          }
+          currentX = endX;
+          endX = beginX;
+        }
+
+        while (currentX < endX) {
+          this.drawDot(currentX, endY, radius);
+          currentX += step + radius * 2;
         }
       }
 
