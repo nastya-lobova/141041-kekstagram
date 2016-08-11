@@ -161,9 +161,9 @@
 
     drawLineDotted : function(beginX, beginY, endX, endY) {
       // Радиус точки
-      var dottedRadius = this._ctx.lineWidth / 2;
+      var radius = this._ctx.lineWidth / 2;
       // Смещение точки
-      var lineDottedStep = 10;
+      var step = 10;
       this._ctx.fillStyle = '#ffe753';
       this._ctx.beginPath();
 
