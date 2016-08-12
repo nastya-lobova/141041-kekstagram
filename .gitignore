@@ -7,5 +7,4 @@ Thumbs.db
 *.psd
 *.ai
 *.pdf
-branch-name
 build/js/main.js

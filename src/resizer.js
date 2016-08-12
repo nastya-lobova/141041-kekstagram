@@ -123,7 +123,7 @@
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
         this._resizeConstraint.side / 2 - this._ctx.lineWidth,
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2
       );
 
       // Правая линия
@@ -159,7 +159,7 @@
       this._ctx.restore();
     },
 
-    drawLineDotted : function(beginX, beginY, endX, endY) {
+    drawLineDotted: function(beginX, beginY, endX, endY) {
       // Радиус точки
       var radius = this._ctx.lineWidth / 2;
       // Смещение точки
@@ -182,7 +182,7 @@
       this._ctx.closePath();
     },
 
-    drawDot : function(coordinateX, coordinateY, radius) {
+    drawDot: function(coordinateX, coordinateY, radius) {
       this._ctx.arc(coordinateX, coordinateY, radius, 0, Math.PI * 2);
     },
 
