@@ -123,7 +123,7 @@
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
         this._resizeConstraint.side / 2 - this._ctx.lineWidth,
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2
       );
 
       // Правая линия
