@@ -67,12 +67,64 @@
     backgroundElement.style.backgroundImage = 'url(' + images[randomImageNumber] + ')';
   }
 
+  // Переменные формы кадрирования
+  var marginLeftResize = document.getElementById('resize-x');
+  var marginTopResize = document.getElementById('resize-y');
+  var sideResize = document.getElementById('resize-size');
+
+  // Минимальные значения полей
+  marginLeftResize.min = 0;
+  marginTopResize.min = 0;
+  sideResize.min = 0;
+
+  marginLeftResize.addEventListener('change', calculateMaxValue);
+  marginTopResize.addEventListener('change', calculateMaxValue);
+  sideResize.addEventListener('change', calculateMaxValue);
+
+  // Выставляет максимальные значения полей
+  function calculateMaxValue() {
+    var sideResizeValue = sideResize.value;
+    if (sideResizeValue < 0) {
+      sideResizeValue = 0;
+    }
+    sideResize.max = Math.min(currentResizer._image.naturalWidth, currentResizer._image.naturalHeight);
+    marginLeftResize.max = currentResizer._image.naturalWidth - sideResizeValue;
+    marginTopResize.max = currentResizer._image.naturalHeight - sideResizeValue;
+  }
+
+  /**
+  * Проверяет, положительное ли число в поле
+  * @return {boolean}
+  */
+  function isValuePositive(elem) {
+    return elem.value >= 0;
+  }
+
+  /**
+  * Проверяет, не больше ли сумма полей слева и сторона, значений ширины исходного изображения
+  * @return {boolean}
+  */
+  function isLeftValueAvailable(elem) {
+    return elem.value + sideResize.value <= currentResizer._image.naturalWidth;
+  }
+
+  /**
+  * Проверяет, не больше ли сумма полей слева и сторона, значений высоты исходного изображения
+  * @return {boolean}
+  */
+  function isTopValueAvailable(elem) {
+    return elem.value + sideResize.value <= currentResizer._image.naturalHeight;
+  }
+
   /**
    * Проверяет, валидны ли данные, в форме кадрирования.
    * @return {boolean}
    */
   function resizeFormIsValid() {
-    return true;
+    if (isValuePositive(marginTopResize) && isValuePositive(marginLeftResize) && isLeftValueAvailable(marginLeftResize) && isTopValueAvailable(marginTopResize)) {
+      return true;
+    }
+    return false;
   }
 
   /**
