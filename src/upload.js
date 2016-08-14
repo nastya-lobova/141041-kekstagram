@@ -93,38 +93,11 @@
   }
 
   /**
-  * Проверяет, положительное ли число в поле
-  * @return {boolean}
-  */
-  function isValuePositive(elem) {
-    return elem.value >= 0;
-  }
-
-  /**
-  * Проверяет, не больше ли сумма полей слева и сторона, значений ширины исходного изображения
-  * @return {boolean}
-  */
-  function isLeftValueAvailable(elem) {
-    return elem.value + sideResize.value <= currentResizer._image.naturalWidth;
-  }
-
-  /**
-  * Проверяет, не больше ли сумма полей слева и сторона, значений высоты исходного изображения
-  * @return {boolean}
-  */
-  function isTopValueAvailable(elem) {
-    return elem.value + sideResize.value <= currentResizer._image.naturalHeight;
-  }
-
-  /**
    * Проверяет, валидны ли данные, в форме кадрирования.
    * @return {boolean}
    */
   function resizeFormIsValid() {
-    if (isValuePositive(marginTopResize) && isValuePositive(marginLeftResize) && isLeftValueAvailable(marginLeftResize) && isTopValueAvailable(marginTopResize)) {
-      return true;
-    }
-    return false;
+    return true;
   }
 
   /**
