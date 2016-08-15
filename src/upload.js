@@ -67,6 +67,31 @@
     backgroundElement.style.backgroundImage = 'url(' + images[randomImageNumber] + ')';
   }
 
+  // Переменные формы кадрирования
+  var marginLeftResize = document.getElementById('resize-x');
+  var marginTopResize = document.getElementById('resize-y');
+  var sideResize = document.getElementById('resize-size');
+
+  // Минимальные значения полей
+  marginLeftResize.min = 0;
+  marginTopResize.min = 0;
+  sideResize.min = 0;
+
+  marginLeftResize.addEventListener('change', calculateMaxValue);
+  marginTopResize.addEventListener('change', calculateMaxValue);
+  sideResize.addEventListener('change', calculateMaxValue);
+
+  // Выставляет максимальные значения полей
+  function calculateMaxValue() {
+    var sideResizeValue = sideResize.value;
+    if (sideResizeValue < 0) {
+      sideResizeValue = 0;
+    }
+    sideResize.max = Math.min(currentResizer._image.naturalWidth, currentResizer._image.naturalHeight);
+    marginLeftResize.max = currentResizer._image.naturalWidth - sideResizeValue;
+    marginTopResize.max = currentResizer._image.naturalHeight - sideResizeValue;
+  }
+
   /**
    * Проверяет, валидны ли данные, в форме кадрирования.
    * @return {boolean}
