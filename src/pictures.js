@@ -20,7 +20,6 @@
     elementToClone = template.content.querySelector('.picture');
   } else {
     elementToClone = template.querySelector('.picture');
-  }
 
   /**
    * @param {Object} data
