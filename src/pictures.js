@@ -1,8 +1,6 @@
 'use strict';
 
 (function() {
-  var pictures = null;
-
   // Функция запроса данных jsonp
   function getJsonp(url, callback) {
     window.jsonpCallback = callback;
@@ -13,7 +11,7 @@
 
   //  Обработка полученных данных
   function getPictures(data) {
-    pictures = data;
+    window.pictures = data;
   }
 
   getJsonp('http://localhost:1506/api/pictures', getPictures);
