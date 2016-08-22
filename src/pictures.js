@@ -27,8 +27,8 @@
    * @param {HTMLElement} container
    * @return {HTMLElement}
    */
-  // Отрисовка данных по шаблону
-  function getPicturesTemplate(data, container) {
+  //Отрисовка данных по шаблону
+  function getPictureTemplate(data) {
     var picture = elementToClone.cloneNode(true);
     var image = new Image(182, 182);
     var imageLoadTimeout;
@@ -39,7 +39,7 @@
     image.onload = function(evt) {
       clearTimeout(imageLoadTimeout);
       picture.href = evt.target.src;
-      picture.querySelector('img').src = evt.target.src;
+      picture.replaceChild(image, picture.querySelector('img'));
     };
 
     image.onerror = function() {
@@ -52,8 +52,12 @@
     }, IMAGE_LOAD_TIMEOUT);
 
     image.src = data.url;
-    container.appendChild(picture);
     return picture;
+  }
+
+  //Рендер шаблона
+  function renderPicture(data, container) {
+    container.appendChild(getPictureTemplate(data));
   }
 
   // Получение фотографий
@@ -66,7 +70,7 @@
       pictures = data;
 
       pictures.forEach(function(image) {
-        getPicturesTemplate(image, pictureContainer);
+        renderPicture(image, pictureContainer);
       });
 
       filters.classList.remove('hidden');
