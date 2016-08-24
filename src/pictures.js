@@ -1,83 +1,22 @@
 'use strict';
+var picture = require('picture');
+var load = require('load');
 
-(function() {
-  var pictures = [];
-  var template = document.getElementById('picture-template');
-  var pictureContainer = document.querySelector('.pictures');
-  /** @constant {number} */
-  var IMAGE_LOAD_TIMEOUT = 10000;
-  var elementToClone;
+var pictures = [];
+var pictureContainer = document.querySelector('.pictures');
+var hotelLoadUrl = 'http://localhost:1506/api/pictures';
 
-  // Функция запроса данных jsonp
-  function getJsonp(url, callback) {
-    window.jsonpCallback = callback;
-    var elementScript = document.createElement('script');
-    elementScript.src = url + '?callback=jsonpCallback';
-    document.body.appendChild(elementScript);
-  }
+//  Обработка полученных данных
+function renderPictures(data) {
+  var filters = document.querySelector('.filters');
+  filters.classList.add('hidden');
+  pictures = data;
 
-  if ('content' in template) {
-    elementToClone = template.content.querySelector('.picture');
-  } else {
-    elementToClone = template.querySelector('.picture');
-  }
+  pictures.forEach(function(image) {
+    picture(image, pictureContainer);
+  });
 
-  /**
-   * @param {Object} data
-   * @param {HTMLElement} container
-   * @return {HTMLElement}
-   */
-  //Отрисовка данных по шаблону
-  function getPictureTemplate(data) {
-    var picture = elementToClone.cloneNode(true);
-    var image = new Image(182, 182);
-    var imageLoadTimeout;
+  filters.classList.remove('hidden');
+}
 
-    picture.querySelector('.picture-comments').textContent = data.comments;
-    picture.querySelector('.picture-likes').textContent = data.likes;
-
-    image.onload = function(evt) {
-      clearTimeout(imageLoadTimeout);
-      picture.href = evt.target.src;
-      picture.replaceChild(image, picture.querySelector('img'));
-    };
-
-    image.onerror = function() {
-      picture.classList.add('picture-load-failure');
-    };
-
-    imageLoadTimeout = setTimeout(function() {
-      picture.querySelector('img').src = '';
-      picture.classList.add('hotel-nophoto');
-    }, IMAGE_LOAD_TIMEOUT);
-
-    image.src = data.url;
-    return picture;
-  }
-
-  //Рендер шаблона
-  function renderPicture(data, container) {
-    container.appendChild(getPictureTemplate(data));
-  }
-
-  // Получение фотографий
-  function getPictures() {
-    var filters = document.querySelector('.filters');
-    filters.classList.add('hidden');
-
-    //  Обработка полученных данных
-    function renderPictures(data) {
-      pictures = data;
-
-      pictures.forEach(function(image) {
-        renderPicture(image, pictureContainer);
-      });
-
-      filters.classList.remove('hidden');
-    }
-
-    getJsonp('http://localhost:1506/api/pictures', renderPictures);
-  }
-
-  getPictures();
-})();
+load(hotelLoadUrl, renderPictures);
