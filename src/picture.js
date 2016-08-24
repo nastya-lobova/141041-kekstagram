@@ -1,4 +1,7 @@
-//Рендер шаблона
+/** Отрисовка картинки
+ * @param {Array} data
+ * @param {HTMLElement} container
+ */
 module.exports = function (data, container) {
   var template = document.getElementById('picture-template');
 
@@ -14,7 +17,6 @@ module.exports = function (data, container) {
 
   /**
    * @param {Object} data
-   * @param {HTMLElement} container
    * @return {HTMLElement}
    */
   function getPictureTemplate(data) {

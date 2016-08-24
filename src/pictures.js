@@ -1,22 +1,24 @@
 'use strict';
-var picture = require('picture');
-var load = require('load');
 
-var pictures = [];
-var pictureContainer = document.querySelector('.pictures');
-var hotelLoadUrl = 'http://localhost:1506/api/pictures';
 
-//  Обработка полученных данных
-function renderPictures(data) {
-  var filters = document.querySelector('.filters');
-  filters.classList.add('hidden');
-  pictures = data;
+  var picture = require('./picture');
+  var load = require('./load');
 
-  pictures.forEach(function(image) {
-    picture(image, pictureContainer);
-  });
+  var pictures = [];
+  var pictureContainer = document.querySelector('.pictures');
+  var hotelLoadUrl = 'http://localhost:1506/api/pictures';
 
-  filters.classList.remove('hidden');
-}
+  //  Обработка полученных данных
+  function renderPictures(data) {
+    var filters = document.querySelector('.filters');
+    filters.classList.add('hidden');
+    pictures = data;
 
-load(hotelLoadUrl, renderPictures);
+    pictures.forEach(function(image) {
+      picture(image, pictureContainer);
+    });
+
+    filters.classList.remove('hidden');
+  }
+
+  load(hotelLoadUrl, renderPictures);

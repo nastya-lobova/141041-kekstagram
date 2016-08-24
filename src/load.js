@@ -1,5 +1,4 @@
-// Функция запроса данных jsonp
-/**
+/** Функция запроса данных jsonp
  * @param {String} url
  * @param {Function} callback
  */
