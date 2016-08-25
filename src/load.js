@@ -1,3 +1,5 @@
+'use strict';
+
 /** Функция запроса данных jsonp
  * @param {String} url
  * @param {Function} callback

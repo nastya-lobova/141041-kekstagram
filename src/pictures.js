@@ -1,4 +1,5 @@
 'use strict';
+
 (function() {
   var picture = require('./picture');
   var load = require('./load');

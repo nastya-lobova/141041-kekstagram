@@ -1,8 +1,10 @@
+'use strict';
+
 /** Отрисовка картинки
  * @param {Array} data
  * @param {HTMLElement} container
  */
-module.exports = function (data, container) {
+module.exports = function(data, container) {
   var template = document.getElementById('picture-template');
 
   /** @constant {number} */
@@ -19,7 +21,7 @@ module.exports = function (data, container) {
    * @param {Object} data
    * @return {HTMLElement}
    */
-  function getPictureTemplate(data) {
+  function getPictureTemplate() {
     var picture = elementToClone.cloneNode(true);
     var image = new Image(182, 182);
     var imageLoadTimeout;
@@ -47,4 +49,4 @@ module.exports = function (data, container) {
   }
 
   container.appendChild(getPictureTemplate(data));
-}
+};
