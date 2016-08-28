@@ -1,10 +1,12 @@
 'use strict';
 
+var Gallery = require('./gallery');
+
 /** Отрисовка картинки
  * @param {Array} data
  * @param {HTMLElement} container
  */
-module.exports = function(data, container) {
+module.exports = function(data, container, number) {
   var template = document.getElementById('picture-template');
 
   /** @constant {number} */
@@ -45,8 +47,18 @@ module.exports = function(data, container) {
     }, IMAGE_LOAD_TIMEOUT);
 
     image.src = data.url;
+    console.log(picture);
+    picture.onclick = function(evt) {
+
+      console.log('повесил');
+      Gallery.show();
+      Gallery.setActivePicture(number);
+      evt.preventDefault;
+    }
     return picture;
   }
 
   container.appendChild(getPictureTemplate(data));
+
+  Gallery.setPictures(data);
 };

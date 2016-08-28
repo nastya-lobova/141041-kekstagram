@@ -3,6 +3,7 @@
 (function() {
   var picture = require('./picture');
   var load = require('./load');
+  var Gallery = require('./gallery');
 
   var pictures = [];
   var pictureContainer = document.querySelector('.pictures');
@@ -14,8 +15,8 @@
     filters.classList.add('hidden');
     pictures = data;
 
-    pictures.forEach(function(image) {
-      picture(image, pictureContainer);
+    pictures.forEach(function(image, i, arr) {
+      picture(image, pictureContainer, i);
     });
 
     filters.classList.remove('hidden');
