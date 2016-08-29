@@ -9,6 +9,21 @@ var Gallery = function() {
   this.galleryOverlayImage = document.querySelector('.gallery-overlay-image');
   this.galleryOverlayLikes = document.querySelector('.likes-count');
   this.galleryOverlayComments = document.querySelector('.comments-count');
+  this.closeGallery = function(evt) {
+    evt.preventDefault();
+    self.hide();
+  };
+  this.changePhoto = function(evt) {
+    evt.preventDefault();
+    var nextNumber = self.activePicture;
+    if (self.pictures.length > (self.activePicture - 1)) {
+      nextNumber++;
+      self.setActivePicture(nextNumber);
+    } else {
+      nextNumber = 0;
+      self.setActivePicture(nextNumber);
+    }
+  };
 };
 
 Gallery.prototype.setPictures = function(data) {
@@ -41,23 +56,6 @@ Gallery.prototype.addEvent = function() {
 Gallery.prototype.removeEvent = function() {
   this.galleryOverlayClose.removeEventListener('click', this.closeGallery);
   this.galleryOverlayImage.removeEventListener('click', this.changePhoto);
-};
-
-Gallery.prototype.closeGallery = function(evt) {
-  evt.preventDefault();
-  self.hide();
-};
-
-Gallery.prototype.changePhoto = function(evt) {
-  evt.preventDefault();
-  var nextNumber = this.activePicture;
-  if (self.pictures.length > (this.activePicture - 1)) {
-    nextNumber++;
-    self.setActivePicture(nextNumber);
-  } else {
-    nextNumber = 0;
-    self.setActivePicture(nextNumber);
-  }
 };
 
 module.exports = new Gallery();
