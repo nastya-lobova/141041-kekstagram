@@ -47,18 +47,13 @@ module.exports = function(data, container, number) {
     }, IMAGE_LOAD_TIMEOUT);
 
     image.src = data.url;
-    console.log(picture);
     picture.onclick = function(evt) {
+      evt.preventDefault();
+      Gallery.show(number);
+    };
 
-      console.log('повесил');
-      Gallery.show();
-      Gallery.setActivePicture(number);
-      evt.preventDefault;
-    }
     return picture;
   }
 
-  container.appendChild(getPictureTemplate(data));
-
-  Gallery.setPictures(data);
+  container.appendChild(getPictureTemplate());
 };

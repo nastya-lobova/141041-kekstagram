@@ -15,10 +15,10 @@
     filters.classList.add('hidden');
     pictures = data;
 
-    pictures.forEach(function(image, i, arr) {
-      picture(image, pictureContainer, i);
+    pictures.forEach(function(image, index) {
+      picture(image, pictureContainer, index);
     });
-
+    Gallery.setPictures(pictures);
     filters.classList.remove('hidden');
   }
 
