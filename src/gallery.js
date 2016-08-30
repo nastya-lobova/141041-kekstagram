@@ -1,7 +1,6 @@
 'use strict';
 
 var Gallery = function() {
-  var self = this;
   this.pictures = null;
   this.activePicture = null;
   this.galleryOverlay = document.querySelector('.gallery-overlay');
@@ -9,21 +8,6 @@ var Gallery = function() {
   this.galleryOverlayImage = document.querySelector('.gallery-overlay-image');
   this.galleryOverlayLikes = document.querySelector('.likes-count');
   this.galleryOverlayComments = document.querySelector('.comments-count');
-  this.closeGallery = function(evt) {
-    evt.preventDefault();
-    self.hide();
-  };
-  this.changePhoto = function(evt) {
-    evt.preventDefault();
-    var nextNumber = self.activePicture;
-    if (self.pictures.length > (self.activePicture - 1)) {
-      nextNumber++;
-      self.setActivePicture(nextNumber);
-    } else {
-      nextNumber = 0;
-      self.setActivePicture(nextNumber);
-    }
-  };
 };
 
 Gallery.prototype.setPictures = function(data) {
@@ -49,6 +33,8 @@ Gallery.prototype.setActivePicture = function(number) {
 };
 
 Gallery.prototype.addEvent = function() {
+  this.closeGallery = this.closeGallery.bind(this);
+  this.changePhoto = this.changePhoto.bind(this);
   this.galleryOverlayClose.addEventListener('click', this.closeGallery);
   this.galleryOverlayImage.addEventListener('click', this.changePhoto);
 };
@@ -56,6 +42,23 @@ Gallery.prototype.addEvent = function() {
 Gallery.prototype.removeEvent = function() {
   this.galleryOverlayClose.removeEventListener('click', this.closeGallery);
   this.galleryOverlayImage.removeEventListener('click', this.changePhoto);
+};
+
+Gallery.prototype.closeGallery = function(evt) {
+  evt.preventDefault();
+  this.hide();
+};
+
+Gallery.prototype.changePhoto = function(evt) {
+  evt.preventDefault();
+  var nextNumber = this.activePicture;
+  if (this.pictures.length > (this.activePicture - 1)) {
+    nextNumber++;
+    this.setActivePicture(nextNumber);
+  } else {
+    nextNumber = 0;
+    this.setActivePicture(nextNumber);
+  }
 };
 
 module.exports = new Gallery();
