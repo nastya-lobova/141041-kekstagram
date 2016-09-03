@@ -9,7 +9,7 @@
   var filters = document.querySelector('.filters');
   var pictureContainer = document.querySelector('.pictures');
   var footer = document.querySelector('.footer');
-  var PICTURE_LOAD_URL = 'http://localhost:1506/api/pictures';
+  var PICTURE_LOAD_URL = '/api/pictures';
   var DELAY_SCROLL = 100;
   var LEFT_PAGE_BOTTOM = 100;
   var lastCall = Date.now();
