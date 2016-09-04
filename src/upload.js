@@ -68,6 +68,7 @@ var browserCookies = require('browser-cookies');
     var randomImageNumber = Math.round(Math.random() * (images.length - 1));
     backgroundElement.style.backgroundImage = 'url(' + images[randomImageNumber] + ')';
   }
+  console.log('gjfgkkgkl');
 
   // Переменные формы кадрирования
   var marginLeftResize = document.getElementById('resize-x');
@@ -82,6 +83,12 @@ var browserCookies = require('browser-cookies');
   marginLeftResize.addEventListener('change', calculateMaxValue);
   marginTopResize.addEventListener('change', calculateMaxValue);
   sideResize.addEventListener('change', calculateMaxValue);
+  sideResize.addEventListener('change', changeResizer);
+
+  function changeResizer() {
+    currentResizer.setConstraint(marginLeftResize.value, marginTopResize.value, sideResize.value);
+  }
+
 
   // Выставляет максимальные значения полей
   function calculateMaxValue() {
@@ -166,7 +173,7 @@ var browserCookies = require('browser-cookies');
    * и показывается форма кадрирования.
    * @param {Event} evt
    */
-  uploadForm.onchange = function(evt) {
+  uploadForm.addEventListener('change', function(evt) {
     var element = evt.target;
     if (element.id === 'upload-file') {
       // Проверка типа загружаемого файла, тип должен быть изображением
@@ -180,6 +187,7 @@ var browserCookies = require('browser-cookies');
           cleanupResizer();
 
           currentResizer = new Resizer(fileReader.result);
+          console.log(currentResizer)
           currentResizer.setElement(resizeForm);
           uploadMessage.classList.add('invisible');
 
@@ -195,14 +203,14 @@ var browserCookies = require('browser-cookies');
         showMessage(Action.ERROR);
       }
     }
-  };
+  });
 
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
    * и обновляет фон.
    * @param {Event} evt
    */
-  resizeForm.onreset = function(evt) {
+  resizeForm.addEventListener('reset', function(evt) {
     evt.preventDefault();
 
     cleanupResizer();
@@ -210,14 +218,14 @@ var browserCookies = require('browser-cookies');
 
     resizeForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
+  });
 
   /**
    * Обработка отправки формы кадрирования. Если форма валидна, экспортирует
    * кропнутое изображение в форму добавления фильтра и показывает ее.
    * @param {Event} evt
    */
-  resizeForm.onsubmit = function(evt) {
+  resizeForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
     if (resizeFormIsValid()) {
@@ -233,27 +241,26 @@ var browserCookies = require('browser-cookies');
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
     }
-  };
+  });
 
   /**
    * Сброс формы фильтра. Показывает форму кадрирования.
    * @param {Event} evt
    */
-  filterForm.onreset = function(evt) {
+  filterForm.addEventListener('reset', function(evt) {
     evt.preventDefault();
 
     filterForm.classList.add('invisible');
     resizeForm.classList.remove('invisible');
-  };
+  });
 
   /**
    * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
    * записав сохраненный фильтр в cookie.
    * @param {Event} evt
    */
-  filterForm.onsubmit = function(evt) {
+  filterForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
-
     var selectedFilter = filterForm['upload-filter'].value;
     var now = new Date();
     var birthdayGraceHopper = new Date(1906, 11, 9);
@@ -277,20 +284,23 @@ var browserCookies = require('browser-cookies');
 
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
+  });
 
   function setDefaultFilter() {
     var defaultFilter = browserCookies.get('upload-filter') || 'none';
 
     filterForm['upload-filter'].value = defaultFilter;
-    filterForm.onchange();
+    changeFilter();
   }
 
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
    */
-  filterForm.onchange = function() {
+  filterForm.addEventListener('change', changeFilter)
+
+
+  function changeFilter() {
     if (!filterMap) {
       // Ленивая инициализация. Объект не создается до тех пор, пока
       // не понадобится прочитать его в первый раз, а после этого запоминается
@@ -311,9 +321,17 @@ var browserCookies = require('browser-cookies');
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
-  };
+  }
+
+  function recalculateResize() {
+    var newCoordinate = currentResizer.getConstraint();
+    resizeForm.x.value = newCoordinate.x;
+    resizeForm.y.value = newCoordinate.y;
+    resizeForm.size.value = newCoordinate.size;
+  }
 
   cleanupResizer();
   updateBackground();
   setDefaultFilter();
+  window.addEventListener('resizerchange', recalculateResize);
 })();

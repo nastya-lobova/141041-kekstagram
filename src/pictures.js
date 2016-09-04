@@ -65,5 +65,5 @@
   window.addEventListener('scroll', getEndPage);
   filters.addEventListener('change', changeFilter, true);
 
-  loadPictures(activeFilter, pageNumber++);
+  //loadPictures(activeFilter, pageNumber++);
 })();
