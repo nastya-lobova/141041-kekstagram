@@ -74,21 +74,25 @@ var browserCookies = require('browser-cookies');
   var marginLeftResize = document.getElementById('resize-x');
   var marginTopResize = document.getElementById('resize-y');
   var sideResize = document.getElementById('resize-size');
+  var resizeControls = document.querySelector('.upload-resize-controls');
 
   // Минимальные значения полей
   marginLeftResize.min = 0;
   marginTopResize.min = 0;
   sideResize.min = 0;
 
-  marginLeftResize.addEventListener('change', calculateMaxValue);
-  marginTopResize.addEventListener('change', calculateMaxValue);
-  sideResize.addEventListener('change', calculateMaxValue);
-  sideResize.addEventListener('change', changeResizer);
-
-  function changeResizer() {
-    currentResizer.setConstraint(marginLeftResize.value, marginTopResize.value, sideResize.value);
+  // Действия при изменении значений в форме
+  function changeResizer(evt) {
+    if (evt.target.classList.contains('upload-resize-control')) {
+      uploadResizer();
+      calculateMaxValue();
+    }
   }
 
+  // Изменение resize при изменении значений в форме
+  function uploadResizer() {
+    currentResizer.setConstraint(Number(marginLeftResize.value), Number(marginTopResize.value), Number(sideResize.value));
+  }
 
   // Выставляет максимальные значения полей
   function calculateMaxValue() {
@@ -100,6 +104,16 @@ var browserCookies = require('browser-cookies');
     marginLeftResize.max = currentResizer._image.naturalWidth - sideResizeValue;
     marginTopResize.max = currentResizer._image.naturalHeight - sideResizeValue;
   }
+
+  // Синхронизация формы со значением resize
+  function recalculateResize() {
+    marginLeftResize.value = currentResizer.getConstraint().x;
+    marginTopResize.value = currentResizer.getConstraint().y;
+    sideResize.value = currentResizer.getConstraint().side;
+  }
+
+  resizeControls.addEventListener('change', changeResizer, true);
+  window.addEventListener('resizerchange', recalculateResize);
 
   /**
    * Проверяет, валидны ли данные, в форме кадрирования.
@@ -297,7 +311,11 @@ var browserCookies = require('browser-cookies');
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
    */
+<<<<<<< HEAD
   filterForm.addEventListener('change', changeFilter)
+=======
+  filterForm.addEventListener('change', changeFilter);
+>>>>>>> da51d78b4a30d3c114e3fcfcc1545f8b50a2ab33
 
 
   function changeFilter() {
@@ -322,6 +340,7 @@ var browserCookies = require('browser-cookies');
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
   }
+<<<<<<< HEAD
 
   function recalculateResize() {
     var newCoordinate = currentResizer.getConstraint();
@@ -329,6 +348,8 @@ var browserCookies = require('browser-cookies');
     resizeForm.y.value = newCoordinate.y;
     resizeForm.size.value = newCoordinate.size;
   }
+=======
+>>>>>>> da51d78b4a30d3c114e3fcfcc1545f8b50a2ab33
 
   cleanupResizer();
   updateBackground();
