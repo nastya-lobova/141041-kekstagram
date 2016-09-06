@@ -153,6 +153,16 @@ var browserCookies = require('browser-cookies');
   var uploadMessage = document.querySelector('.upload-message');
 
   /**
+   * @type {HTMLElement}
+   */
+  var pictureContainer = document.querySelector('.pictures');
+
+  /**
+   * @type {HTMLElement}
+   */
+  var filters = document.querySelector('.filters');
+
+  /**
    * @param {Action} action
    * @param {string=} message
    * @return {Element}
@@ -207,6 +217,8 @@ var browserCookies = require('browser-cookies');
 
           uploadForm.classList.add('invisible');
           resizeForm.classList.remove('invisible');
+          pictureContainer.classList.add('hidden');
+          filters.classList.add('hidden');
 
           hideMessage();
         };
@@ -298,6 +310,8 @@ var browserCookies = require('browser-cookies');
 
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
+    pictureContainer.classList.remove('hidden');
+    filters.classList.remove('hidden');
   });
 
   function setDefaultFilter() {
