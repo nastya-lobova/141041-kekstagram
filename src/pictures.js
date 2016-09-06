@@ -17,14 +17,20 @@
   var pageNumber = 0;
   var pageSize = 12;
 
-  var getEndPage = function() {
-    if (Date.now() - lastCall >= DELAY_SCROLL) {
-      if (footer.getBoundingClientRect().bottom - window.innerHeight <= LEFT_PAGE_BOTTOM) {
-        loadPictures(activeFilter, pageNumber++);
-      }
-      lastCall = Date.now();
+  var imagesScroll = throttle(function() {
+    if (footer.getBoundingClientRect().bottom - window.innerHeight <= LEFT_PAGE_BOTTOM) {
+      loadPictures(activeFilter, pageNumber++);
     }
-  };
+  }, DELAY_SCROLL);
+
+  function throttle(performFunction, delay) {
+    return function() {
+      if (Date.now() - lastCall >= delay) {
+        performFunction();
+        lastCall = Date.now();
+      }
+    };
+  }
 
   var changeFilter = function(evt) {
     if (evt.target.classList.contains('filters-radio')) {
@@ -47,7 +53,7 @@
     });
     Gallery.setPictures(pictures);
     filters.classList.remove('hidden');
-    getEndPage();
+    imagesScroll();
   }
 
   /** Отправка данных
@@ -62,7 +68,7 @@
     }, renderPictures);
   }
 
-  window.addEventListener('scroll', getEndPage);
+  window.addEventListener('scroll', imagesScroll);
   filters.addEventListener('change', changeFilter, true);
 
   loadPictures(activeFilter, pageNumber++);
