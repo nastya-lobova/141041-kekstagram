@@ -38,8 +38,8 @@ Picture.prototype.setImage = function() {
     self.element.replaceChild(image, self.element.querySelector('img'));
   };
   image.onerror = function() {
-    self.element.classList.add('picture-load-failure');
-  };
+    this.element.classList.add('picture-load-failure');
+  }.bind(this);
   var imageLoadTimeout = setTimeout(function() {
     self.element.querySelector('img').src = '';
     self.element.classList.add('hotel-nophoto');
