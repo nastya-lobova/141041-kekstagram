@@ -335,16 +335,6 @@
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
   }
-<<<<<<< HEAD
-
-  function recalculateResize() {
-    var newCoordinate = currentResizer.getConstraint();
-    resizeForm.x.value = newCoordinate.x;
-    resizeForm.y.value = newCoordinate.y;
-    resizeForm.size.value = newCoordinate.size;
-  }
-=======
->>>>>>> da51d78b4a30d3c114e3fcfcc1545f8b50a2ab33
 
   cleanupResizer();
   updateBackground();
