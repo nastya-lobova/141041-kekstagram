@@ -7,8 +7,6 @@
 
 'use strict';
 
-var browserCookies = require('browser-cookies');
-
 (function() {
   /** @enum {string} */
   var FileType = {
@@ -255,22 +253,9 @@ var browserCookies = require('browser-cookies');
     evt.preventDefault();
 
     var selectedFilter = filterForm['upload-filter'].value;
-    var now = new Date();
-    var birthdayGraceHopper = new Date(1906, 11, 9);
-    var birthdayGraceHopperThisYear = new Date(now.getFullYear(), birthdayGraceHopper.getMonth(), birthdayGraceHopper.getDate());
-    var birthdayGraceHopperLastYear = new Date((now.getFullYear() - 1), birthdayGraceHopper.getMonth(), birthdayGraceHopper.getDate());
-    var oneDayInMs = 24 * 60 * 60 * 1000;
-    var expireCookies;
 
-    // Срок окончания хранения cookies
-    if (now > birthdayGraceHopperThisYear) {
-      expireCookies = Math.floor((now - birthdayGraceHopperThisYear) / oneDayInMs);
-    } else {
-      expireCookies = Math.floor((now - birthdayGraceHopperLastYear) / oneDayInMs);
-    }
-
-    // Сохрание фильтра в cookies
-    browserCookies.set('upload-filter', selectedFilter, {expires: expireCookies});
+    // Сохрание фильтра в localStorage
+    localStorage.setItem('upload-filter', selectedFilter);
 
     cleanupResizer();
     updateBackground();
@@ -280,7 +265,7 @@ var browserCookies = require('browser-cookies');
   };
 
   function setDefaultFilter() {
-    var defaultFilter = browserCookies.get('upload-filter') || 'none';
+    var defaultFilter = localStorage.getItem('upload-filter') || 'none';
 
     filterForm['upload-filter'].value = defaultFilter;
     filterForm.onchange();
