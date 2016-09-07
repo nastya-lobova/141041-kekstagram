@@ -17,16 +17,18 @@
   var pageNumber = 0;
   var pageSize = 12;
 
-  var imagesScroll = throttle(function() {
+  var getBottomPage = function() {
     if (footer.getBoundingClientRect().bottom - window.innerHeight <= LEFT_PAGE_BOTTOM) {
       loadPictures(activeFilter, pageNumber++);
     }
-  }, DELAY_SCROLL);
+  };
+
+  var imagesScroll = throttle(getBottomPage, DELAY_SCROLL);
 
   function throttle(performFunction, delay) {
     return function() {
       if (Date.now() - lastCall >= delay) {
-        performFunction();
+        performFunction.apply(this, arguments);
         lastCall = Date.now();
       }
     };
