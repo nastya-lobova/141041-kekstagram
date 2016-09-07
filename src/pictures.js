@@ -12,11 +12,9 @@
   var PICTURE_LOAD_URL = '/api/pictures';
   var DELAY_SCROLL = 100;
   var LEFT_PAGE_BOTTOM = 100;
-  var lastCall = Date.now();
   var activeFilter = null;
   var pageNumber = 0;
   var pageSize = 12;
-  var lastCall = 0;
 
   var getBottomPage = function() {
     if (footer.getBoundingClientRect().bottom - window.innerHeight <= LEFT_PAGE_BOTTOM) {
@@ -26,13 +24,38 @@
 
   var imagesScroll = throttle(getBottomPage, DELAY_SCROLL);
 
+
+  /** Функция обертка throttle
+   * @param {function} performFunction
+   * @param {Number} delay
+   */
   function throttle(performFunction, delay) {
-    return function() {
-      if (Date.now() - lastCall >= delay) {
-        performFunction.apply(this, arguments);
-        lastCall = Date.now();
+    var isThrottled = false;
+    var saveArguments = null;
+    var saveThis = null;
+
+    function wrapper() {
+      if (isThrottled) {
+        saveArguments = arguments;
+        saveThis = this;
+        return;
       }
-    };
+
+      performFunction.apply(this, arguments);
+
+      isThrottled = true;
+
+      setTimeout(function() {
+        isThrottled = false;
+        if (saveArguments) {
+          wrapper.apply(saveThis, saveArguments);
+          saveArguments = null;
+          saveThis = null;
+        }
+
+      }, delay);
+    }
+    return wrapper;
   }
 
   var changeFilter = function(evt) {
