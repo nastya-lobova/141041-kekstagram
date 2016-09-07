@@ -66,7 +66,6 @@
     var randomImageNumber = Math.round(Math.random() * (images.length - 1));
     backgroundElement.style.backgroundImage = 'url(' + images[randomImageNumber] + ')';
   }
-  console.log('gjfgkkgkl');
 
   // Переменные формы кадрирования
   var marginLeftResize = document.getElementById('resize-x');
@@ -209,7 +208,6 @@
           cleanupResizer();
 
           currentResizer = new Resizer(fileReader.result);
-          console.log(currentResizer)
           currentResizer.setElement(resizeForm);
           uploadMessage.classList.add('invisible');
 
@@ -311,7 +309,7 @@
    * выбранному значению в форме.
    */
 
-  filterForm.addEventListener('change', changeFilter)
+  filterForm.addEventListener('change', changeFilter);
 
   function changeFilter() {
     if (!filterMap) {
@@ -339,5 +337,4 @@
   cleanupResizer();
   updateBackground();
   setDefaultFilter();
-  window.addEventListener('resizerchange', recalculateResize);
 })();
