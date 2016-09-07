@@ -16,6 +16,7 @@
   var activeFilter = null;
   var pageNumber = 0;
   var pageSize = 12;
+  var lastCall = 0;
 
   var getBottomPage = function() {
     if (footer.getBoundingClientRect().bottom - window.innerHeight <= LEFT_PAGE_BOTTOM) {
