@@ -19,7 +19,7 @@ var Picture = function(data, index) {
   this.pictureLikes = this.element.querySelector('.picture-likes');
   this.pictureComments.textContent = this.data.comments;
   this.pictureLikes.textContent = this.data.likes;
-  this.image = this.setImage();
+  this.image = this.createImage();
   this.openGallery = this.openGallery.bind(this);
   this.element.addEventListener('click', this.openGallery);
 };
@@ -29,23 +29,25 @@ Picture.prototype.openGallery = function(evt) {
   gallery.show(this.index);
 };
 
-Picture.prototype.setImage = function() {
-  var self = this;
+Picture.prototype.createImage = function() {
   var image = new Image(182, 182);
+
   image.onload = function(evt) {
     clearTimeout(imageLoadTimeout);
-    self.element.href = evt.target.src;
-    self.element.replaceChild(image, self.element.querySelector('img'));
-  };
+    this.element.href = evt.target.src;
+    this.element.replaceChild(image, this.element.querySelector('img'));
+  }.bind(this);
+
   image.onerror = function() {
     this.element.classList.add('picture-load-failure');
   }.bind(this);
-  var imageLoadTimeout = setTimeout(function() {
-    self.element.querySelector('img').src = '';
-    self.element.classList.add('hotel-nophoto');
-  }, IMAGE_LOAD_TIMEOUT);
 
-  image.src = self.data.url;
+  var imageLoadTimeout = setTimeout(function() {
+    this.element.querySelector('img').src = '';
+    this.element.classList.add('hotel-nophoto');
+  }.bind(this), IMAGE_LOAD_TIMEOUT);
+
+  image.src = this.data.url;
 };
 
 Picture.prototype.remove = function() {
