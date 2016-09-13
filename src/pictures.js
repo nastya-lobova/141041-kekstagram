@@ -75,7 +75,7 @@
 
     pictures.forEach(function(image, index) {
       var picture = new Picture(image, index);
-      pictureContainer.appendChild(picture.element);
+      picture.add(pictureContainer);
     });
     Gallery.setPictures(pictures);
     filters.classList.remove('hidden');
