@@ -8,6 +8,7 @@ var Gallery = function() {
   this.galleryOverlayImage = document.querySelector('.gallery-overlay-image');
   this.galleryOverlayLikes = document.querySelector('.likes-count');
   this.galleryOverlayComments = document.querySelector('.comments-count');
+  this.galleryOverlayLikes.addEventListener('click', this.onlikeCount.bind(this));
 };
 
 Gallery.prototype.setPictures = function(data) {
@@ -15,6 +16,7 @@ Gallery.prototype.setPictures = function(data) {
 };
 
 Gallery.prototype.show = function(number) {
+  this.index = number;
   this.addEvent();
   this.galleryOverlay.classList.remove('invisible');
   this.setActivePicture(number);
@@ -25,11 +27,11 @@ Gallery.prototype.hide = function() {
   this.removeEvent();
 };
 
-Gallery.prototype.setActivePicture = function(number) {
-  this.activePicture = number;
-  this.galleryOverlayImage.src = this.pictures[number].url;
-  this.galleryOverlayLikes.innerHTML = this.pictures[number].likes;
-  this.galleryOverlayComments.innerHTML = this.pictures[number].comments;
+Gallery.prototype.setActivePicture = function() {
+  this.activePicture = this.index;
+  this.galleryOverlayImage.src = this.pictures[this.index].data.url;
+  this.galleryOverlayLikes.innerHTML = this.pictures[this.index].data.likes;
+  this.galleryOverlayComments.innerHTML = this.pictures[this.index].data.comments;
 };
 
 Gallery.prototype.addEvent = function() {
@@ -59,6 +61,11 @@ Gallery.prototype.changePhoto = function(evt) {
     nextNumber = 0;
     this.setActivePicture(nextNumber);
   }
+};
+
+Gallery.prototype.onlikeCount = function() {
+  this.pictures[this.index].data.setLikesCount();
+  this.galleryOverlayLikes.innerHTML = this.pictures[this.index].data.updateLikes();
 };
 
 module.exports = new Gallery();
