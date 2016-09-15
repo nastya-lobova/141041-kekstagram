@@ -3,6 +3,7 @@
 var Gallery = function() {
   this.pictures = null;
   this.activePicture = null;
+  this.pictureLiked = false;
   this.galleryOverlay = document.querySelector('.gallery-overlay');
   this.galleryOverlayClose = document.querySelector('.gallery-overlay-close');
   this.galleryOverlayImage = document.querySelector('.gallery-overlay-image');
@@ -28,10 +29,10 @@ Gallery.prototype.hide = function() {
 };
 
 Gallery.prototype.setActivePicture = function() {
-  this.activePicture = this.index;
-  this.galleryOverlayImage.src = this.pictures[this.index].data.url;
-  this.galleryOverlayLikes.innerHTML = this.pictures[this.index].data.likes;
-  this.galleryOverlayComments.innerHTML = this.pictures[this.index].data.comments;
+  this.activePicture = this.pictures[this.index].data;
+  this.galleryOverlayImage.src = this.activePicture.url;
+  this.galleryOverlayLikes.innerHTML = this.activePicture.likes;
+  this.galleryOverlayComments.innerHTML = this.activePicture.comments;
 };
 
 Gallery.prototype.addEvent = function() {
@@ -53,8 +54,8 @@ Gallery.prototype.closeGallery = function(evt) {
 
 Gallery.prototype.changePhoto = function(evt) {
   evt.preventDefault();
-  var nextNumber = this.activePicture;
-  if (this.pictures.length > (this.activePicture - 1)) {
+  var nextNumber = this.activePicture.index;
+  if (this.pictures.length > (this.activePicture.index - 1)) {
     nextNumber++;
     this.setActivePicture(nextNumber);
   } else {
@@ -64,8 +65,15 @@ Gallery.prototype.changePhoto = function(evt) {
 };
 
 Gallery.prototype.onlikeCount = function() {
-  this.pictures[this.index].data.setLikesCount();
-  this.galleryOverlayLikes.innerHTML = this.pictures[this.index].data.updateLikes();
+  if (!this.pictureLiked) {
+    this.pictureLiked = true;
+    this.activePicture.addLikes();
+  } else {
+    this.pictureLiked = false;
+    this.activePicture.subtractLikes();
+  }
+
+  this.galleryOverlayLikes.innerHTML = this.activePicture.getLikes();
 };
 
 module.exports = new Gallery();

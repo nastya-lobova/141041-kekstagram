@@ -75,7 +75,7 @@ Picture.prototype.onchangeLikes = function(evt) {
 };
 
 Picture.prototype.updateLikes = function() {
-  this.pictureLikes.textContent = this.data.updateLikes();
+  this.pictureLikes.textContent = this.data.getLikes();
 };
 
 module.exports = Picture;
