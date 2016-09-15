@@ -15,9 +15,8 @@ if ('content' in template) {
   elementToClone = template.querySelector('.picture');
 }
 
-var Picture = function(data, index) {
+var Picture = function(data) {
   this.data = data;
-  this.index = index;
   BaseElement.call(this, this.getElement());
   this.onclick = this.onclick.bind(this);
   this.element.addEventListener('click', this.onclick);

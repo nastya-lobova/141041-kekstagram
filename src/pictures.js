@@ -4,6 +4,7 @@
   var Picture = require('./picture');
   var load = require('./load');
   var Gallery = require('./gallery');
+  var PictureData = require('./picture-data');
 
   var pictures = [];
   var filters = document.querySelector('.filters');
@@ -74,7 +75,8 @@
     pictures = data;
 
     pictures.forEach(function(image, index) {
-      var picture = new Picture(image, index);
+      var pictureData = new PictureData(image, index);
+      var picture = new Picture(pictureData);
       picture.add(pictureContainer);
     });
     Gallery.setPictures(pictures);
