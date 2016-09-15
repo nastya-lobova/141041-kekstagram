@@ -1,6 +1,5 @@
 'use strict';
 
-var gallery = require('./gallery');
 var BaseElement = require('./base-element');
 var inherit = require('./inherit');
 
@@ -28,7 +27,7 @@ inherit(Picture, BaseElement);
 
 Picture.prototype.onclick = function(evt) {
   evt.preventDefault();
-  gallery.show(this.index);
+  location.hash = '#photo/' + this.data.url;
 };
 
 Picture.prototype.getElement = function() {

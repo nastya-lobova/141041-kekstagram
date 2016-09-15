@@ -83,6 +83,7 @@
     Gallery.setPictures(pictures);
     filters.classList.remove('hidden');
     imagesScroll();
+    window.dispatchEvent(new Event('hashchange'));
   }
 
   /** Отправка данных
