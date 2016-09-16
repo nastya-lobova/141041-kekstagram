@@ -78,8 +78,6 @@
   marginTopResize.min = 0;
   sideResize.min = 0;
 
-
-
   // Действия при изменении значений в форме
   function changeResizer(evt) {
     if (evt.target.classList.contains('upload-resize-control')) {
@@ -310,8 +308,8 @@
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
    */
-  filterForm.addEventListener('change', changeFilter);
 
+  filterForm.addEventListener('change', changeFilter);
 
   function changeFilter() {
     if (!filterMap) {
