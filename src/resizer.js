@@ -182,18 +182,18 @@
       var nextY = sideY / lengthLine * step;
 
       for (var i = 0; i < numberStep; i++) {
-        draw(beginX, beginY, nextX ,nextY, i);
+        draw(beginX, beginY, nextX, nextY, i);
       }
 
       this._ctx.stroke();
       this._ctx.closePath();
     },
 
-    drawLineZigzag: function(beginX, beginY, nextX ,nextY, index) {
+    drawLineZigzag: function(beginX, beginY, nextX, nextY, index) {
       this.drawZigzag(beginX + nextX * index, beginY + nextY * index, beginX + nextX * (index + 1), beginY + nextY * (index + 1));
     },
 
-    drawLineDot: function(beginX, beginY, nextX ,nextY, index) {
+    drawLineDot: function(beginX, beginY, nextX, nextY, index) {
       // Радиус точки
       var radius = this._ctx.lineWidth / 2;
       this.drawDot(beginX + nextX * index, beginY + nextY * index, radius);
