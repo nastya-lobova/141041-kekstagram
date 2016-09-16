@@ -8,32 +8,39 @@ var PictureData = function(data, index) {
   this.url = this.data.url;
 };
 
-PictureData.prototype.updateLikes = function() {
+PictureData.prototype.getLikes = function() {
   return this.likes;
 };
 
-PictureData.prototype.updateComments = function() {
+PictureData.prototype.getComments = function() {
   return this.comments;
 };
 
 PictureData.prototype.setLikesCount = function() {
-  this.likes++;
-  // var event = new CustomEvent('likes-count', {
-  //   detail: {
-  //     index: this.index
-  //   }
-  // });
   var event = document.createEvent('Event');
   event.initEvent('likes-count', true, true);
   event.detail = {
     index: this.index
   };
-
   document.dispatchEvent(event);
 };
 
-PictureData.prototype.setComments = function() {
-  return this.comments++;
+PictureData.prototype.addLikes = function() {
+  this.likes++;
+  this.setLikesCount();
+};
+
+PictureData.prototype.subtractLikes = function() {
+  this.likes--;
+  this.setLikesCount();
+};
+
+PictureData.prototype.addComments = function() {
+  this.comments++;
+};
+
+PictureData.prototype.subtractComments = function() {
+  this.comments--;
 };
 
 

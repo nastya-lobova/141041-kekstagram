@@ -94,7 +94,7 @@ Picture.prototype.onchangeLikes = function(evt) {
  * Обновяет количество лайков из обьекта данных
  */
 Picture.prototype.updateLikes = function() {
-  this.pictureLikes.textContent = this.data.updateLikes();
+  this.pictureLikes.textContent = this.data.getLikes();
 };
 
 module.exports = Picture;
