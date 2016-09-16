@@ -83,7 +83,9 @@
     Gallery.setPictures(pictures);
     filters.classList.remove('hidden');
     imagesScroll();
-    window.dispatchEvent(new Event('hashchange'));
+    var event = document.createEvent('Event');
+    event.initEvent('hashchange', true, true);
+    document.dispatchEvent(event);
   }
 
   /** Отправка данных
