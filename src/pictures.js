@@ -72,16 +72,18 @@
    */
   function renderPictures(data) {
     filters.classList.add('hidden');
-    pictures = data;
 
-    pictures.forEach(function(image, index) {
+    data.forEach(function(image, index) {
       var pictureData = new PictureData(image, index);
       var picture = new Picture(pictureData);
+      pictures.push(picture);
       picture.add(pictureContainer);
     });
+
     Gallery.setPictures(pictures);
     filters.classList.remove('hidden');
     imagesScroll();
+    window.dispatchEvent(new Event('hashchange'));
   }
 
   /** Отправка данных

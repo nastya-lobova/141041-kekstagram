@@ -8,28 +8,40 @@ var Gallery = function() {
   this.galleryOverlayImage = document.querySelector('.gallery-overlay-image');
   this.galleryOverlayLikes = document.querySelector('.likes-count');
   this.galleryOverlayComments = document.querySelector('.comments-count');
+  this.galleryOverlayLikes.addEventListener('click', this.onlikeCount.bind(this));
+  window.addEventListener('hashchange', this.onchangeLocation.bind(this));
 };
 
 Gallery.prototype.setPictures = function(data) {
   this.pictures = data;
 };
 
-Gallery.prototype.show = function(number) {
+Gallery.prototype.onShow = function(indicator) {
+  if (!isFinite(indicator)) {
+    var picture = this.pictures.filter(function(item) {
+      return item.data.url === indicator;
+    });
+    this.index = picture[0].data.index;
+  } else {
+    this.index = indicator;
+  }
+
   this.addEvent();
   this.galleryOverlay.classList.remove('invisible');
-  this.setActivePicture(number);
+  this.setActivePicture(this.index);
 };
 
 Gallery.prototype.hide = function() {
+  location.hash = '';
   this.galleryOverlay.classList.add('invisible');
   this.removeEvent();
 };
 
-Gallery.prototype.setActivePicture = function(number) {
-  this.activePicture = number;
-  this.galleryOverlayImage.src = this.pictures[number].url;
-  this.galleryOverlayLikes.innerHTML = this.pictures[number].likes;
-  this.galleryOverlayComments.innerHTML = this.pictures[number].comments;
+Gallery.prototype.setActivePicture = function() {
+  this.activePicture = this.index;
+  this.galleryOverlayImage.src = this.pictures[this.index].data.url;
+  this.galleryOverlayLikes.innerHTML = this.pictures[this.index].data.likes;
+  this.galleryOverlayComments.innerHTML = this.pictures[this.index].data.comments;
 };
 
 Gallery.prototype.addEvent = function() {
@@ -52,12 +64,26 @@ Gallery.prototype.closeGallery = function(evt) {
 Gallery.prototype.changePhoto = function(evt) {
   evt.preventDefault();
   var nextNumber = this.activePicture;
-  if (this.pictures.length > (this.activePicture - 1)) {
+  if (this.pictures.length > this.activePicture + 1) {
     nextNumber++;
-    this.setActivePicture(nextNumber);
   } else {
     nextNumber = 0;
-    this.setActivePicture(nextNumber);
+  }
+  location.hash = 'photo/' + this.pictures[nextNumber].data.url;
+};
+
+Gallery.prototype.onlikeCount = function() {
+  this.pictures[this.index].data.setLikesCount();
+  this.galleryOverlayLikes.innerHTML = this.pictures[this.index].data.updateLikes();
+};
+
+Gallery.prototype.onchangeLocation = function() {
+  var hash = location.hash.match(/#photo\/(\S+)/);
+  if (hash) {
+    this.onShow(hash[1]);
+  } else {
+    this.hide();
+    return;
   }
 };
 
