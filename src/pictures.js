@@ -4,6 +4,7 @@
   var Picture = require('./picture');
   var load = require('./load');
   var Gallery = require('./gallery');
+  var PictureData = require('./picture-data');
 
   var pictures = [];
   var filters = document.querySelector('.filters');
@@ -12,19 +13,51 @@
   var PICTURE_LOAD_URL = '/api/pictures';
   var DELAY_SCROLL = 100;
   var LEFT_PAGE_BOTTOM = 100;
-  var lastCall = Date.now();
   var activeFilter = null;
   var pageNumber = 0;
   var pageSize = 12;
 
-  var getEndPage = function() {
-    if (Date.now() - lastCall >= DELAY_SCROLL) {
-      if (footer.getBoundingClientRect().bottom - window.innerHeight <= LEFT_PAGE_BOTTOM) {
-        loadPictures(activeFilter, pageNumber++);
-      }
-      lastCall = Date.now();
+  var getBottomPage = function() {
+    if (footer.getBoundingClientRect().bottom - window.innerHeight <= LEFT_PAGE_BOTTOM) {
+      loadPictures(activeFilter, pageNumber++);
     }
   };
+
+  var imagesScroll = throttle(getBottomPage, DELAY_SCROLL);
+
+
+  /** Функция обертка throttle
+   * @param {function} performFunction
+   * @param {Number} delay
+   */
+  function throttle(performFunction, delay) {
+    var isThrottled = false;
+    var saveArguments = null;
+    var saveThis = null;
+
+    function wrapper() {
+      if (isThrottled) {
+        saveArguments = arguments;
+        saveThis = this;
+        return;
+      }
+
+      performFunction.apply(this, arguments);
+
+      isThrottled = true;
+
+      setTimeout(function() {
+        isThrottled = false;
+        if (saveArguments) {
+          wrapper.apply(saveThis, saveArguments);
+          saveArguments = null;
+          saveThis = null;
+        }
+
+      }, delay);
+    }
+    return wrapper;
+  }
 
   var changeFilter = function(evt) {
     if (evt.target.classList.contains('filters-radio')) {
@@ -42,12 +75,13 @@
     pictures = data;
 
     pictures.forEach(function(image, index) {
-      var picture = new Picture(image, index);
-      pictureContainer.appendChild(picture.element);
+      var pictureData = new PictureData(image, index);
+      var picture = new Picture(pictureData);
+      picture.add(pictureContainer);
     });
     Gallery.setPictures(pictures);
     filters.classList.remove('hidden');
-    getEndPage();
+    imagesScroll();
   }
 
   /** Отправка данных
@@ -62,7 +96,7 @@
     }, renderPictures);
   }
 
-  window.addEventListener('scroll', getEndPage);
+  window.addEventListener('scroll', imagesScroll);
   filters.addEventListener('change', changeFilter, true);
 
   loadPictures(activeFilter, pageNumber++);
