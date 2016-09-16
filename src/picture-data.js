@@ -17,12 +17,11 @@ PictureData.prototype.getComments = function() {
 };
 
 PictureData.prototype.setLikesCount = function() {
-  var event = new CustomEvent('likes-count', {
-    detail: {
-      index: this.index
-    }
-  });
-
+  var event = document.createEvent('Event');
+  event.initEvent('likes-count', true, true);
+  event.detail = {
+    index: this.index
+  };
   document.dispatchEvent(event);
 };
 

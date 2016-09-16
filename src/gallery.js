@@ -19,11 +19,11 @@ Gallery.prototype.setPictures = function(data) {
 
 Gallery.prototype.onShow = function(indicator) {
   if (!isFinite(indicator)) {
-    for(var i = 0; i < this.pictures.length; i++) {
-      if (this.pictures[i].data.url === indicator) {
-        this.index = this.pictures[i].data.index;
+    this.pictures.forEach(function(item) {
+      if (item.data.url === indicator) {
+        this.index = item.data.index;
       }
-    }
+    }, this);
   } else {
     this.index = indicator;
   }
