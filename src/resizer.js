@@ -118,37 +118,47 @@
       this._ctx.textAlign = 'center';
       this._ctx.fillText(this._image.naturalWidth + ' × ' + this._image.naturalHeight, 0, -(this._resizeConstraint.side / 2 + this._ctx.lineWidth + 10));
 
+      // Смещение рисунка на линии
+      var step = 50;
 
       // Вверхняя линия
-      this.drawLineZigzag(
+      this.drawLine(
         (-this._resizeConstraint.side / 2),
         (-this._resizeConstraint.side / 2),
-        this._resizeConstraint.side / 2 - 100,
-        (-this._resizeConstraint.side / 2)
+        this._resizeConstraint.side / 2 - step,
+        (-this._resizeConstraint.side / 2),
+        this.drawLineZigzag.bind(this),
+        step
       );
 
       // Правая линия
-      this.drawLineZigzag(
-        this._resizeConstraint.side / 2 - 50,
+      this.drawLine(
+        this._resizeConstraint.side / 2 - step / 2,
         (-this._resizeConstraint.side / 2),
-        this._resizeConstraint.side / 2 - 50,
-        this._resizeConstraint.side / 2 - 100
+        this._resizeConstraint.side / 2 - step / 2,
+        this._resizeConstraint.side / 2 - step,
+        this.drawLineZigzag.bind(this),
+        step
       );
 
       // Нижняя линия
-      this.drawLineZigzag(
+      this.drawLine(
         this._resizeConstraint.side / 2,
         this._resizeConstraint.side / 2,
-        (-this._resizeConstraint.side / 2) + 100,
-        this._resizeConstraint.side / 2
+        (-this._resizeConstraint.side / 2) + step,
+        this._resizeConstraint.side / 2,
+        this.drawLineZigzag.bind(this),
+        step
       );
 
       // Левая линия
-      this.drawLineZigzag(
-        (-this._resizeConstraint.side / 2) + 50,
+      this.drawLine(
+        (-this._resizeConstraint.side / 2) + step / 2,
         this._resizeConstraint.side / 2,
-        (-this._resizeConstraint.side / 2) + 50,
-        (-this._resizeConstraint.side / 2) + 100
+        (-this._resizeConstraint.side / 2) + step / 2,
+        (-this._resizeConstraint.side / 2) + step,
+        this.drawLineZigzag.bind(this),
+        step
       );
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
@@ -160,32 +170,7 @@
       this._ctx.restore();
     },
 
-    drawLineDotted: function(beginX, beginY, endX, endY) {
-      // Радиус точки
-      var radius = this._ctx.lineWidth / 2;
-      // Смещение точки
-      var step = 10;
-      this._ctx.fillStyle = '#ffe753';
-      this._ctx.beginPath();
-
-      var sideX = endX - beginX;
-      var sideY = endY - beginY;
-      var lengthLine = Math.sqrt(Math.pow(sideX, 2) + Math.pow(sideY, 2));
-      var numberStep = lengthLine / step;
-      var nextX = sideX / lengthLine * step;
-      var nextY = sideY / lengthLine * step;
-
-      for (var i = 0; i < numberStep; i++) {
-        this.drawDot(beginX + nextX * i, beginY + nextY * i, radius);
-      }
-
-      this._ctx.fill();
-      this._ctx.closePath();
-    },
-
-    drawLineZigzag: function(beginX, beginY, endX, endY) {
-      // Смещение точки
-      var step = 100;
+    drawLine: function(beginX, beginY, endX, endY, draw, step) {
       this._ctx.strokeStyle = '#ffe753';
       this._ctx.beginPath();
 
@@ -197,17 +182,26 @@
       var nextY = sideY / lengthLine * step;
 
       for (var i = 0; i < numberStep; i++) {
-        this.drawZigzag(beginX + nextX * i, beginY + nextY * i, beginX + nextX * (i + 1), beginY + nextY * (i + 1));
+        draw(beginX, beginY, nextX ,nextY, i);
       }
 
       this._ctx.stroke();
       this._ctx.closePath();
     },
 
+    drawLineZigzag: function(beginX, beginY, nextX ,nextY, index) {
+      this.drawZigzag(beginX + nextX * index, beginY + nextY * index, beginX + nextX * (index + 1), beginY + nextY * (index + 1));
+    },
+
+    drawLineDot: function(beginX, beginY, nextX ,nextY, index) {
+      // Радиус точки
+      var radius = this._ctx.lineWidth / 2;
+      this.drawDot(beginX + nextX * index, beginY + nextY * index, radius);
+    },
+
     drawZigzag: function(beginX, beginY, endX, endY) {
       var centerX = (beginX + endX) / 2;
       var centerY = (beginY + endY) / 2;
-
       this._ctx.moveTo(beginX, beginY);
       this._ctx.lineTo(centerX + centerY - beginY, centerY + centerX - beginX);
       this._ctx.lineTo(endX, endY);
