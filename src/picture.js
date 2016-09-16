@@ -17,9 +17,11 @@ if ('content' in template) {
 
 var Picture = function(data) {
   this.data = data;
+  this.index = this.data.index;
   BaseElement.call(this, this.getElement());
   this.onclick = this.onclick.bind(this);
   this.element.addEventListener('click', this.onclick);
+  document.addEventListener('likes-count', this.onchangeLikes.bind(this));
 };
 
 inherit(Picture, BaseElement);
@@ -63,6 +65,17 @@ Picture.prototype.createImage = function() {
 Picture.prototype.remove = function() {
   this.element.removeEventListener('click', this.onclick);
   BaseElement.prototype.remove.call(this);
+};
+
+Picture.prototype.onchangeLikes = function(evt) {
+  if (this.index !== evt.detail.index) {
+    return;
+  }
+  this.updateLikes();
+};
+
+Picture.prototype.updateLikes = function() {
+  this.pictureLikes.textContent = this.data.getLikes();
 };
 
 module.exports = Picture;
