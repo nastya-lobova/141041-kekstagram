@@ -87,13 +87,13 @@ Picture.prototype.onchangeLikes = function(evt) {
   if (this.index !== evt.detail.index) {
     return;
   }
-  this.updateLikes();
+  this.getLikes();
 };
 
 /**
- * Обновяет количество лайков из обьекта данных
+ * Записывает количество лайков из обьекта данных
  */
-Picture.prototype.updateLikes = function() {
+Picture.prototype.getLikes = function() {
   this.pictureLikes.textContent = this.data.getLikes();
 };
 
