@@ -19,7 +19,7 @@ Gallery.prototype.setPictures = function(data) {
 Gallery.prototype.onShow = function(indicator) {
   if (!isFinite(indicator)) {
     this.pictures.forEach(function(item) {
-      if(item.data.url === indicator) {
+      if (item.data.url === indicator) {
         this.index = item.data.index;
       }
     }, this);
