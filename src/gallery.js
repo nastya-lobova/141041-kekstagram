@@ -18,10 +18,11 @@ Gallery.prototype.setPictures = function(data) {
 
 Gallery.prototype.onShow = function(indicator) {
   if (!isFinite(indicator)) {
-    var picture = this.pictures.filter(function(item) {
-      return item.data.url === indicator;
-    });
-    this.index = picture[0].data.index;
+    this.pictures.forEach(function(item) {
+      if(item.data.url === indicator) {
+        this.index = item.data.index;
+      }
+    }, this);
   } else {
     this.index = indicator;
   }
