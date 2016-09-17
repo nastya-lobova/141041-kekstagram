@@ -6,6 +6,7 @@ var PictureData = function(data, index) {
   this.comments = this.data.comments;
   this.likes = this.data.likes;
   this.url = this.data.url;
+  this.liked = false;
 };
 
 PictureData.prototype.getLikes = function() {
@@ -17,6 +18,13 @@ PictureData.prototype.getComments = function() {
 };
 
 PictureData.prototype.setLikesCount = function() {
+  if (!this.liked) {
+    this.addLikes();
+    this.liked = true;
+  } else {
+    this.subtractLikes();
+    this.liked = false;
+  }
   var event = document.createEvent('Event');
   event.initEvent('likes-count', true, true);
   event.detail = {
@@ -27,12 +35,10 @@ PictureData.prototype.setLikesCount = function() {
 
 PictureData.prototype.addLikes = function() {
   this.likes++;
-  this.setLikesCount();
 };
 
 PictureData.prototype.subtractLikes = function() {
   this.likes--;
-  this.setLikesCount();
 };
 
 PictureData.prototype.addComments = function() {

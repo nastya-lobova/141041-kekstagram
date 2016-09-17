@@ -3,7 +3,6 @@
 var Gallery = function() {
   this.pictures = null;
   this.activePicture = null;
-  this.pictureLiked = false;
   this.galleryOverlay = document.querySelector('.gallery-overlay');
   this.galleryOverlayClose = document.querySelector('.gallery-overlay-close');
   this.galleryOverlayImage = document.querySelector('.gallery-overlay-image');
@@ -75,14 +74,7 @@ Gallery.prototype.changePhoto = function(evt) {
 };
 
 Gallery.prototype.onlikeCount = function() {
-  if (!this.pictureLiked) {
-    this.pictureLiked = true;
-    this.activePicture.addLikes();
-  } else {
-    this.pictureLiked = false;
-    this.activePicture.subtractLikes();
-  }
-
+  this.activePicture.setLikesCount();
   this.galleryOverlayLikes.innerHTML = this.activePicture.getLikes();
 };
 
