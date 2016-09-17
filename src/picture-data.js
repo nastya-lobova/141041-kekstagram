@@ -9,20 +9,23 @@ var PictureData = function(data, index) {
   this.liked = false;
 };
 
+/**Возвращает количество лайков*/
 PictureData.prototype.getLikes = function() {
   return this.likes;
 };
 
+/**Возвращает количество комментариев*/
 PictureData.prototype.getComments = function() {
   return this.comments;
 };
 
+/**При изменение лайков изменяет состояние и создает событие для оповещения*/
 PictureData.prototype.setLikesCount = function() {
   if (!this.liked) {
-    this.addLikes();
+    this.addLike();
     this.liked = true;
   } else {
-    this.subtractLikes();
+    this.removeLike();
     this.liked = false;
   }
   var event = document.createEvent('Event');
@@ -33,21 +36,24 @@ PictureData.prototype.setLikesCount = function() {
   document.dispatchEvent(event);
 };
 
-PictureData.prototype.addLikes = function() {
+/**Прибавляет лайк*/
+PictureData.prototype.addLike = function() {
   this.likes++;
 };
 
-PictureData.prototype.subtractLikes = function() {
+/**Удаляет лайк*/
+PictureData.prototype.removeLike = function() {
   this.likes--;
 };
 
-PictureData.prototype.addComments = function() {
+/**Прибавляет комментарий*/
+PictureData.prototype.addComment = function() {
   this.comments++;
 };
 
-PictureData.prototype.subtractComments = function() {
+/**Прибавляет комментарий*/
+PictureData.prototype.removeComment = function() {
   this.comments--;
 };
-
 
 module.exports = PictureData;

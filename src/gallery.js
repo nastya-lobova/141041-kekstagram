@@ -12,10 +12,17 @@ var Gallery = function() {
   window.addEventListener('hashchange', this.onchangeLocation.bind(this));
 };
 
+/**Добавляет в галерею массив обьектов фотографий
+ * @param {Array} data
+ */
 Gallery.prototype.setPictures = function(data) {
   this.pictures = data;
 };
 
+/**Открывает галерею
+ * @param {Number} indicator
+ * @param {String} indicator
+ */
 Gallery.prototype.onShow = function(indicator) {
   if (!isFinite(indicator)) {
     this.pictures.forEach(function(item) {
@@ -32,12 +39,14 @@ Gallery.prototype.onShow = function(indicator) {
   this.setActivePicture(this.index);
 };
 
+/**Закрывает галерею*/
 Gallery.prototype.hide = function() {
   location.hash = '';
   this.galleryOverlay.classList.add('invisible');
   this.removeEvent();
 };
 
+/**Устанавливает активную фотографию*/
 Gallery.prototype.setActivePicture = function() {
   this.activePicture = this.pictures[this.index].data;
   this.galleryOverlayImage.src = this.activePicture.url;
@@ -45,23 +54,31 @@ Gallery.prototype.setActivePicture = function() {
   this.galleryOverlayComments.innerHTML = this.activePicture.comments;
 };
 
+/**Добавляет обработчики событий*/
 Gallery.prototype.addEvent = function() {
-  this.closeGallery = this.closeGallery.bind(this);
-  this.changePhoto = this.changePhoto.bind(this);
-  this.galleryOverlayClose.addEventListener('click', this.closeGallery);
-  this.galleryOverlayImage.addEventListener('click', this.changePhoto);
+  this.galleryOverlayClose.addEventListener('click', this.closeGallery.bind(this));
+  this.galleryOverlayImage.addEventListener('click', this.changePhoto.bind(this));
 };
 
+/**Удаляет обработчики событий*/
 Gallery.prototype.removeEvent = function() {
   this.galleryOverlayClose.removeEventListener('click', this.closeGallery);
   this.galleryOverlayImage.removeEventListener('click', this.changePhoto);
 };
 
+/**
+ * Закрывает галерею при нажатии на крестик
+ * @param {Event} evt
+ */
 Gallery.prototype.closeGallery = function(evt) {
   evt.preventDefault();
   this.hide();
 };
 
+/**
+ * Переключается следующая фотография
+ * @param {Event} evt
+ */
 Gallery.prototype.changePhoto = function(evt) {
   evt.preventDefault();
   var nextNumber = this.activePicture.index;
@@ -73,11 +90,16 @@ Gallery.prototype.changePhoto = function(evt) {
   location.hash = 'photo/' + this.pictures[nextNumber].data.url;
 };
 
-Gallery.prototype.onlikeCount = function() {
+ /* Обработка клика по лайку
+ * @param {Event} evt
+ */
+Gallery.prototype.onlikeCount = function(evt) {
+  evt.preventDefault();
   this.activePicture.setLikesCount();
   this.galleryOverlayLikes.innerHTML = this.activePicture.getLikes();
 };
 
+/**Следит за изменением hash в адресной строке*/
 Gallery.prototype.onchangeLocation = function() {
   var hash = location.hash.match(/#photo\/(\S+)/);
   if (hash) {
