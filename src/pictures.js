@@ -73,8 +73,8 @@
   function renderPictures(data) {
     filters.classList.add('hidden');
 
-    data.forEach(function(image, index) {
-      var pictureData = new PictureData(image, index);
+    data.forEach(function(image) {
+      var pictureData = new PictureData(image, pictures.length);
       var picture = new Picture(pictureData);
       pictures.push(picture);
       picture.add(pictureContainer);
@@ -83,6 +83,9 @@
     Gallery.setPictures(pictures);
     filters.classList.remove('hidden');
     imagesScroll();
+    var event = document.createEvent('Event');
+    event.initEvent('hashchange', true, true);
+    document.dispatchEvent(event);
   }
 
   /** Отправка данных

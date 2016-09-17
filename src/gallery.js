@@ -90,8 +90,7 @@ Gallery.prototype.changePhoto = function(evt) {
   location.hash = 'photo/' + this.pictures[nextNumber].data.url;
 };
 
-/**
- * Обработка клика по лайку
+ /* Обработка клика по лайку
  * @param {Event} evt
  */
 Gallery.prototype.onlikeCount = function(evt) {
