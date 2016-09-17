@@ -14,6 +14,10 @@ if ('content' in template) {
   elementToClone = template.querySelector('.picture');
 }
 
+/**
+ * @constructor
+ * @param {Object} data
+ */
 var Picture = function(data) {
   this.data = data;
   this.index = this.data.index;

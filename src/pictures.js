@@ -5,6 +5,7 @@
   var load = require('./load');
   var Gallery = require('./gallery');
   var PictureData = require('./picture-data');
+  var utils = require('./utils');
 
   var pictures = [];
   var filters = document.querySelector('.filters');
@@ -17,50 +18,22 @@
   var pageNumber = 0;
   var pageSize = 12;
 
+  /** Проверяет виден ли футер и запускает загрузку новых данных если нет */
   var getBottomPage = function() {
     if (footer.getBoundingClientRect().bottom - window.innerHeight <= LEFT_PAGE_BOTTOM) {
       loadPictures(activeFilter, pageNumber++);
     }
   };
 
-  var imagesScroll = throttle(getBottomPage, DELAY_SCROLL);
+  var imagesScroll = utils.throttle(getBottomPage, DELAY_SCROLL);
 
-
-  /** Функция обертка throttle
-   * @param {function} performFunction
-   * @param {Number} delay
+  /**
+   * Переключает фильтр
+   * @param {Event} evt
    */
-  function throttle(performFunction, delay) {
-    var isThrottled = false;
-    var saveArguments = null;
-    var saveThis = null;
-
-    function wrapper() {
-      if (isThrottled) {
-        saveArguments = arguments;
-        saveThis = this;
-        return;
-      }
-
-      performFunction.apply(this, arguments);
-
-      isThrottled = true;
-
-      setTimeout(function() {
-        isThrottled = false;
-        if (saveArguments) {
-          wrapper.apply(saveThis, saveArguments);
-          saveArguments = null;
-          saveThis = null;
-        }
-
-      }, delay);
-    }
-    return wrapper;
-  }
-
   var changeFilter = function(evt) {
     if (evt.target.classList.contains('filters-radio')) {
+      pictures = [];
       pictureContainer.innerHTML = '';
       pageNumber = 0;
       loadPictures(evt.target.id, pageNumber++);

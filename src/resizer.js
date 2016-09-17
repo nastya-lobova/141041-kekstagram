@@ -170,6 +170,14 @@
       this._ctx.restore();
     },
 
+    /** Отрисовка линии точками
+     * @param {Number} beginX
+     * @param {Number} beginY
+     * @param {Number} endX
+     * @param {Number} endY
+     * @param {Function} draw
+     * @param {Number} step
+     */
     drawLine: function(beginX, beginY, endX, endY, draw, step) {
       this._ctx.strokeStyle = '#ffe753';
       this._ctx.beginPath();
@@ -189,16 +197,36 @@
       this._ctx.closePath();
     },
 
+    /** Отрисовка линии зигзагом
+     * @param {Number} beginX
+     * @param {Number} beginY
+     * @param {Number} endX
+     * @param {Number} endY
+     * @param {Number} index
+     */
     drawLineZigzag: function(beginX, beginY, nextX, nextY, index) {
       this.drawZigzag(beginX + nextX * index, beginY + nextY * index, beginX + nextX * (index + 1), beginY + nextY * (index + 1));
     },
 
+    /** Отрисовка линии точками
+     * @param {Number} beginX
+     * @param {Number} beginY
+     * @param {Number} endX
+     * @param {Number} endY
+     * @param {Number} index
+     */
     drawLineDot: function(beginX, beginY, nextX, nextY, index) {
       // Радиус точки
       var radius = this._ctx.lineWidth / 2;
       this.drawDot(beginX + nextX * index, beginY + nextY * index, radius);
     },
 
+    /** Отрисовка части зигзага
+     * @param {Number} beginX
+     * @param {Number} beginY
+     * @param {Number} endX
+     * @param {Number} endY
+     */
     drawZigzag: function(beginX, beginY, endX, endY) {
       var centerX = (beginX + endX) / 2;
       var centerY = (beginY + endY) / 2;
@@ -208,10 +236,14 @@
       this._ctx.stroke();
     },
 
-    drawDot: function(coordinateX, coordinateY, radius) {
-      this._ctx.arc(coordinateX, coordinateY, radius, 0, Math.PI * 2);
+    /** Отрисовка точки
+     * @param {Number} x
+     * @param {Number} y
+     * @param {Number} radius
+     */
+    drawDot: function(x, y, radius) {
+      this._ctx.arc(x, y, radius, 0, Math.PI * 2);
     },
-
 
     /**
      * Включение режима перемещения. Запоминается текущее положение курсора,
