@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * @constructor
+ * @param {Object} data
+ * @param {Number} index
+ */
 var PictureData = function(data, index) {
   this.data = data;
   this.index = index;

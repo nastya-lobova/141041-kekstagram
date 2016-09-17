@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * @constructor
+ */
 var Gallery = function() {
   this.pictures = null;
   this.activePicture = null;
@@ -12,14 +15,16 @@ var Gallery = function() {
   window.addEventListener('hashchange', this.onchangeLocation.bind(this));
 };
 
-/**Добавляет в галерею массив обьектов фотографий
+/**
+ * Добавляет в галерею массив обьектов фотографий
  * @param {Array} data
  */
 Gallery.prototype.setPictures = function(data) {
   this.pictures = data;
 };
 
-/**Открывает галерею
+/**
+ * Открывает галерею
  * @param {Number} indicator
  * @param {String} indicator
  */
@@ -39,14 +44,14 @@ Gallery.prototype.onShow = function(indicator) {
   this.setActivePicture(this.index);
 };
 
-/**Закрывает галерею*/
+/** Закрывает галерею */
 Gallery.prototype.hide = function() {
   location.hash = '';
   this.galleryOverlay.classList.add('invisible');
   this.removeEvent();
 };
 
-/**Устанавливает активную фотографию*/
+/** Устанавливает активную фотографию */
 Gallery.prototype.setActivePicture = function() {
   this.activePicture = this.pictures[this.index].data;
   this.galleryOverlayImage.src = this.activePicture.url;
@@ -54,13 +59,13 @@ Gallery.prototype.setActivePicture = function() {
   this.galleryOverlayComments.innerHTML = this.activePicture.comments;
 };
 
-/**Добавляет обработчики событий*/
+/** Добавляет обработчики событий */
 Gallery.prototype.addEvent = function() {
   this.galleryOverlayClose.addEventListener('click', this.closeGallery.bind(this));
   this.galleryOverlayImage.addEventListener('click', this.changePhoto.bind(this));
 };
 
-/**Удаляет обработчики событий*/
+/** Удаляет обработчики событий */
 Gallery.prototype.removeEvent = function() {
   this.galleryOverlayClose.removeEventListener('click', this.closeGallery);
   this.galleryOverlayImage.removeEventListener('click', this.changePhoto);
@@ -90,7 +95,8 @@ Gallery.prototype.changePhoto = function(evt) {
   location.hash = 'photo/' + this.pictures[nextNumber].data.url;
 };
 
- /* Обработка клика по лайку
+/**
+ * Обработка клика по лайку
  * @param {Event} evt
  */
 Gallery.prototype.onlikeCount = function(evt) {
@@ -99,7 +105,7 @@ Gallery.prototype.onlikeCount = function(evt) {
   this.galleryOverlayLikes.innerHTML = this.activePicture.getLikes();
 };
 
-/**Следит за изменением hash в адресной строке*/
+/** Следит за изменением hash в адресной строке */
 Gallery.prototype.onchangeLocation = function() {
   var hash = location.hash.match(/#photo\/(\S+)/);
   if (hash) {

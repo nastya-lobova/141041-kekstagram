@@ -78,7 +78,10 @@
   marginTopResize.min = 0;
   sideResize.min = 0;
 
-  // Действия при изменении значений в форме
+  /**
+   * Действия при изменении значений в форме
+   * @param {Event} evt
+   */
   function changeResizer(evt) {
     if (evt.target.classList.contains('upload-resize-control')) {
       uploadResizer();
@@ -86,12 +89,12 @@
     }
   }
 
-  // Изменение resize при изменении значений в форме
+  /** Изменение resize при изменении значений в форме */
   function uploadResizer() {
     currentResizer.setConstraint(Number(marginLeftResize.value), Number(marginTopResize.value), Number(sideResize.value));
   }
 
-  // Выставляет максимальные значения полей
+  /** Выставляет максимальные значения полей */
   function calculateMaxValue() {
     var sideResizeValue = sideResize.value;
     if (sideResizeValue < 0) {
@@ -102,7 +105,7 @@
     marginTopResize.max = currentResizer._image.naturalHeight - sideResizeValue;
   }
 
-  // Синхронизация формы со значением resize
+  /** Синхронизация формы со значением resize */
   function recalculateResize() {
     marginLeftResize.value = currentResizer.getConstraint().x;
     marginTopResize.value = currentResizer.getConstraint().y;
