@@ -7,10 +7,10 @@ var Gallery = function() {
   this.pictures = null;
   this.activePicture = null;
   this.galleryOverlay = document.querySelector('.gallery-overlay');
-  this.galleryOverlayClose = document.querySelector('.gallery-overlay-close');
-  this.galleryOverlayImage = document.querySelector('.gallery-overlay-image');
-  this.galleryOverlayLikes = document.querySelector('.likes-count');
-  this.galleryOverlayComments = document.querySelector('.comments-count');
+  this.galleryOverlayClose = this.galleryOverlay.querySelector('.gallery-overlay-close');
+  this.galleryOverlayImage = this.galleryOverlay.querySelector('.gallery-overlay-image');
+  this.galleryOverlayLikes = this.galleryOverlay.querySelector('.likes-count');
+  this.galleryOverlayComments = this.galleryOverlay.querySelector('.comments-count');
   this.galleryOverlayLikes.addEventListener('click', this.onlikeCount.bind(this));
   window.addEventListener('hashchange', this.onchangeLocation.bind(this));
 };
