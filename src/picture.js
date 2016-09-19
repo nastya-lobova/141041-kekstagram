@@ -45,8 +45,8 @@ Picture.prototype.getElement = function() {
   this.element = elementToClone.cloneNode(true);
   this.pictureComments = this.element.querySelector('.picture-comments');
   this.pictureLikes = this.element.querySelector('.picture-likes');
-  this.pictureComments.textContent = this.data.comments;
-  this.pictureLikes.textContent = this.data.likes;
+  this.pictureComments.textContent = this.data.getComments();
+  this.pictureLikes.textContent = this.data.getLikes();
   this.image = this.createImage();
   return this.element;
 };
@@ -88,10 +88,9 @@ Picture.prototype.remove = function() {
  * @param {Event} evt
  */
 Picture.prototype.onchangeLikes = function(evt) {
-  if (this.index !== evt.detail.index) {
-    return;
+  if (this.index === evt.detail.index) {
+    this.getLikes();
   }
-  this.getLikes();
 };
 
 /**
