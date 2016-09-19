@@ -5,12 +5,12 @@
  */
 var Gallery = function() {
   this.pictures = null;
-  this.activePicture = null;
+  this.index = null;
   this.galleryOverlay = document.querySelector('.gallery-overlay');
-  this.galleryOverlayClose = document.querySelector('.gallery-overlay-close');
-  this.galleryOverlayImage = document.querySelector('.gallery-overlay-image');
-  this.galleryOverlayLikes = document.querySelector('.likes-count');
-  this.galleryOverlayComments = document.querySelector('.comments-count');
+  this.galleryOverlayClose = this.galleryOverlay.querySelector('.gallery-overlay-close');
+  this.galleryOverlayImage = this.galleryOverlay.querySelector('.gallery-overlay-image');
+  this.galleryOverlayLikes = this.galleryOverlay.querySelector('.likes-count');
+  this.galleryOverlayComments = this.galleryOverlay.querySelector('.comments-count');
   this.galleryOverlayLikes.addEventListener('click', this.onlikeCount.bind(this));
   window.addEventListener('hashchange', this.onchangeLocation.bind(this));
 };
@@ -25,11 +25,10 @@ Gallery.prototype.setPictures = function(data) {
 
 /**
  * Открывает галерею
- * @param {Number} indicator
- * @param {String} indicator
+ * @param {(Number|String)} indicator
  */
 Gallery.prototype.onShow = function(indicator) {
-  if (!isFinite(indicator)) {
+  if (typeof indicator !== 'number') {
     this.pictures.forEach(function(item) {
       if (item.data.url === indicator) {
         this.index = item.data.index;
@@ -53,10 +52,10 @@ Gallery.prototype.hide = function() {
 
 /** Устанавливает активную фотографию */
 Gallery.prototype.setActivePicture = function() {
-  this.activePicture = this.pictures[this.index].data;
-  this.galleryOverlayImage.src = this.activePicture.url;
-  this.galleryOverlayLikes.innerHTML = this.activePicture.likes;
-  this.galleryOverlayComments.innerHTML = this.activePicture.comments;
+  var activePicture = this.pictures[this.index].data;
+  this.galleryOverlayImage.src = activePicture.url;
+  this.galleryOverlayLikes.innerHTML = activePicture.likes;
+  this.galleryOverlayComments.innerHTML = activePicture.comments;
 };
 
 /** Добавляет обработчики событий */
@@ -86,8 +85,8 @@ Gallery.prototype.closeGallery = function(evt) {
  */
 Gallery.prototype.changePhoto = function(evt) {
   evt.preventDefault();
-  var nextNumber = this.activePicture.index;
-  if (this.pictures.length > (this.activePicture.index - 1)) {
+  var nextNumber = this.index;
+  if (this.pictures.length > (this.index - 1)) {
     nextNumber++;
   } else {
     nextNumber = 0;
@@ -101,8 +100,8 @@ Gallery.prototype.changePhoto = function(evt) {
  */
 Gallery.prototype.onlikeCount = function(evt) {
   evt.preventDefault();
-  this.activePicture.setLikesCount();
-  this.galleryOverlayLikes.innerHTML = this.activePicture.getLikes();
+  this.pictures[this.index].data.setLikesCount();
+  this.galleryOverlayLikes.innerHTML = this.pictures[this.index].data.getLikes();
 };
 
 /** Следит за изменением hash в адресной строке */
@@ -112,7 +111,6 @@ Gallery.prototype.onchangeLocation = function() {
     this.onShow(hash[1]);
   } else {
     this.hide();
-    return;
   }
 };
 

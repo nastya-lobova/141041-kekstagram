@@ -200,8 +200,8 @@
     /** Отрисовка линии зигзагом
      * @param {Number} beginX
      * @param {Number} beginY
-     * @param {Number} endX
-     * @param {Number} endY
+     * @param {Number} nextX
+     * @param {Number} nextY
      * @param {Number} index
      */
     drawLineZigzag: function(beginX, beginY, nextX, nextY, index) {
@@ -211,8 +211,8 @@
     /** Отрисовка линии точками
      * @param {Number} beginX
      * @param {Number} beginY
-     * @param {Number} endX
-     * @param {Number} endY
+     * @param {Number} nextX
+     * @param {Number} nextY
      * @param {Number} index
      */
     drawLineDot: function(beginX, beginY, nextX, nextY, index) {
